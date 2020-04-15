@@ -25,10 +25,8 @@ class IO {
   /* Initialize serial communication */
   void initSerial();
   /* Message to serial monitor */
-  // void serialPrint(float msg);
-  // void serialPrintln(float msg);
-  // void serialPrint(char* message);
-  // void serialPrintln(char* message);
+  void serialPrint(char* message);
+  void serialPrintln(char* message);
   /* Check for presence of file */
   bool checkFile(char* filename);
   /* Check if recipefile still has on more character */

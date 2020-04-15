@@ -46,6 +46,8 @@ bool readOneLine(char* line){
 			//break;
 		}
 	}
+	myIO->serialPrint((char*)"Line found: ");
+	myIO->serialPrintln(line);				
 	return linefound;
 }
 
@@ -57,9 +59,10 @@ int readColumns(char* line, const char* ch, char * col[], int numCol){
 	//Serial.println("readColumns: " + line);
 	// As long as there is at least two characters left and we want more columns
 	while (strlen(line) > 1 && i<numCol){
-		int pos =strstr(line, ch) - line;// find location of first delimeter
-		// cout << " delimeter at :" << i << endl;
-		// cout << " substring is :" << pos << endl;
+	        int pos =strstr(line, ch) - line;// find location of first delimeter
+		cout << "line is :" << line << endl;
+		cout << " delimeter at :" << i << endl;
+		cout << " substring is :" << pos << endl;
 		//strncpy(col[i], line, pos); // get part before delimeter
 		for(int j=0; j< pos; j++){
 			col[i][j] = line[j];

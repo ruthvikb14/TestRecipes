@@ -13,6 +13,8 @@
 #include "fileSD/IO.h"
 #endif
 
+#include "./src/recipes/recipes.h"
+
 /* myIO needs to be known to recipes.cpp */
 extern IO * myIO;
 

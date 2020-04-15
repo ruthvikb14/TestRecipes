@@ -1,6 +1,7 @@
 /* IO functions for command line on PC */
 #include "IO.h"
 
+/* You can use c specific code here */
 
 //Constructor
 IO::IO(char * fname){
@@ -11,23 +12,15 @@ void IO::initSerial(){
   //Nothing to do
 }
 
-// void IO::serialPrint(float msg) {
 
-  // printf("%f",msg);
-// }
+void IO::serialPrint(char * message) {
 
-// void IO::serialPrintln(float msg) {
-  // printf("%f\n",msg);
-// }
+  printf("%s",message);
+}
 
-// void IO::serialPrint(char * message) {
-
-  // printf("%s",message);
-// }
-
-// void IO::serialPrintln(char * message) {
-  // printf("%s\n",message);
-// }
+void IO::serialPrintln(char * message) {
+  printf("%s\n",message);
+}
 
 /* Test if recipes file is present */
 bool IO::checkFile(char* filename) {
@@ -55,7 +48,7 @@ char IO::recipeFileread(){
 	char c;
 	// THIS NEED TO BE DONE:
 	recipeFile_.get(c);
-	//cout << c << endl;
+	//cout << c;
 	return c;
 }
 

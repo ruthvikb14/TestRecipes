@@ -1,7 +1,6 @@
-#include "./fileStdio/IO.h"
 #include "TestRecipes.h"
-#include<cstdio>
-#include "./src/recipes/recipes.h"
+//Don't inlude, IO.h. correct IO is loaded in Testrecipes.h //.
+//Don't include any c specific libraries
 
 IO * myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
 recipes * myrecipes; //Defintion of recipe file
@@ -11,29 +10,35 @@ void setup(){
 }
 
 int main(){
-	// myIO->serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
-	// myIO->serialPrintln(1000);
+  char filename[] = "RECIPES.CSV";
+  char m;
 
-	/* check if Recipes file exists */
-	char filename[] = "RECIPES.CSV";
-	char m;
-	
-	myIO = new IO(filename);
+  myIO->serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
+  // myIO->serialPrintln(1000);
   
-	if(!myIO->recipeFileavailable()){
-		cout << "Failed to open file for writing recipes file" << endl;
-		return 0;
-    }
-	
-	//m = myIO->recipeFileread();
-	/* Read file contents character by character and display on command line or serial monitor */
-	// while(m!='\n'){
-		// cout << m;
-		// m = myIO->recipeFileread();
-	// }
-	//myIO->serialPrint((char*)"Number of recipes found : ");
-	/* Read Recipes from file */
-	int numRecipes= myrecipes->LoadRecipes(myrecipes->recipes_array);
-	cout << numRecipes << endl;
-	myIO->recipeFileclose();
+  /* check if Recipes file exists */
+  
+  myIO = new IO(filename);
+  
+  if(!myIO->recipeFileavailable()){
+    myIO->serialPrintln((char*)"Failed to open file for writing recipes file");
+    return 0;
+  }
+  
+  /* Test if file can be correctly read: Read file contents character
+     by character and display on command line or serial monitor until EOF*/ 
+  m = myIO->recipeFileread();
+  myIO->serialPrint(&m);
+  while(myIO->recipeFileavailable()){
+    myIO->serialPrint(&m);
+    m = myIO->recipeFileread();
+  }
+  myIO->recipeFileclose();
+
+  /* Read Recipes from file */
+  myIO = new IO(filename);
+  int numRecipes= myrecipes->LoadRecipes(myrecipes->recipes_array);
+  myIO->serialPrint((char*)"Number of recipes found : ");
+  m=numRecipes+'0';//This trick will only work for num [0..9]
+  myIO->serialPrintln(&m);
 }
