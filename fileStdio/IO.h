@@ -10,7 +10,7 @@
 #include<cstdlib>
 
 using namespace std;
-
+ 
 class IO {
  private:
   // TO BE DONE:

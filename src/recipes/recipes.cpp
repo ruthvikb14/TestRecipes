@@ -3,7 +3,7 @@
 #define MAXPARSTRINGS 10 // Size of array that holds parameter names
 #define MAX_LENGTH 80
 //Constructor
-recipes::recipes(){
+recipes::recipes(){ 
   //Nothing to do
 };
 

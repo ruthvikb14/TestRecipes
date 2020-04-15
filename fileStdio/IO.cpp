@@ -27,7 +27,7 @@ bool IO::checkFile(char* filename) {
   // THIS NEED TO BE DONE:
   //recipeFile = SD.open("/RECIPES.CSV"); // recipeFile is global to IO.h
   if (recipeFile_.good()) {
-	  cout << "File checked" << endl;
+	  cout << "File checked" << endl; 
       return true;
     }
   else {

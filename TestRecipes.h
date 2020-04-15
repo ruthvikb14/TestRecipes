@@ -23,7 +23,7 @@ extern IO * myIO;
 extern unsigned int B_nr_set; //the number of elements in the array
 extern long Nr_cycles; //The number of cycles throught the array, a value of 0 means an infinite amound of cycles
 extern unsigned int Looppar_1; //Looppar_1,2 track at which point of the field-array the program is
-extern unsigned int Looppar_2; 
+extern unsigned int Looppar_2;  
 
 extern unsigned long Switching_time[B_NR_MAX]; //the time the program waits before switching to the next value of the magnetic field, in matrix to allow an alterating switching time, keep all values the same to have a constant switching time
 extern double B_arrayfield_x[B_NR_MAX]; //an array containing B_Nr_set elements for the field in the x-direction, each element has to be an integer between -256 and 256 and negative numbers can be used for opposite directions
