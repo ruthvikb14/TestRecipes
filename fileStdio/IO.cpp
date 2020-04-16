@@ -12,6 +12,14 @@ void IO::initSerial(){
   //Nothing to do
 }
 
+void IO::serialPrint(float message) {
+
+  printf("%.1f",message);
+}
+
+void IO::serialPrintln(float message) {
+  printf("%.1f\n",message);
+}
 
 void IO::serialPrint(char * message) {
 

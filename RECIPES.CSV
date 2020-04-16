@@ -42,7 +42,8 @@
 ,0,0,-1,100,GREEN,60,1,1,1
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
-@,Recipe,“Cmag Green, with initialisation 100s”,,,,,,,
+,,,,,,,,,,
+@,Recipe,Cmag Green,,,,,,,
 #,"If N_cycles = 0, run indefinitely",,,,,,,,
 @,N_cycles,0,,,,,,,
 @,Sequence,,,,,,,,
@@ -54,7 +55,7 @@
 ,0.5,0,0,29.5,GREEN,60,1,1,1
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
-,,,,,,,,,
+
 @,Recipe,Cmag Red,,,,,,,
 #,"If N_cycles = 0, run indefinitely",,,,,,,,
 @,N_cycles,0,,,,,,,
@@ -67,7 +68,7 @@
 ,0.5,0,0,29.5,RED,60,1,1,1
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
-,,,,,,,,,
+
 @,Recipe,Marathon green,,,,,,,
 #,"If N_cycles = 0, run indefinitely",,,,,,,,
 @,N_cycles,0,,,,,,,
@@ -77,3 +78,4 @@
 ,0,0,-1,100,GREEN,60,1,1,1
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
+,,,,,,,,,,,
