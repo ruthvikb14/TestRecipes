@@ -303,6 +303,17 @@ recipe_num: which recipe the user selected
 /*
 void recipes::program_init(int recipe_num)
 {   
+	unsigned int B_nr_set; 
+	unsigned long Switching_time[B_NR_MAX]; 
+	double B_arrayfield_x[B_NR_MAX];
+	double B_arrayfield_y[B_NR_MAX];
+	double B_arrayfield_z[B_NR_MAX];
+	int LEDColor_array[B_NR_MAX];
+	int LEDInt_array[B_NR_MAX];
+	bool Gradient_x[B_NR_MAX];
+	bool Gradient_y[B_NR_MAX];
+	bool Gradient_z[B_NR_MAX];
+	
 	recipe * recipes_array = new recipe[MaxRecipes];
 	myIO->serialPrintln((char*)"Starting program_init");delay(1000);
 

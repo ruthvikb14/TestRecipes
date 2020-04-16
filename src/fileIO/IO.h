@@ -3,13 +3,13 @@
 
 #if defined(stdioVersion)
 /*IO for command line on PC */
-#warning "Compiling for command line stdio"
+//#warning "Compiling for command line stdio"
 #include <stdio.h>
 #include<fstream>
-#include <sstream>
-#include<iostream>
+//#include <sstream>
+//#include<iostream>
 #include <cstring>
-#include<cstdlib>
+//#include<cstdlib>
 
 using namespace std;
 
@@ -24,7 +24,7 @@ class IO {
 	private:
         // Quick fix, REMOVE LATER!!! LEON
 #if defined(stdioVersion)
-	ifstream recipeFile_; // Global variable to remember the file handle
+        ifstream recipeFile_; // Global variable to remember the file handle
 #elif defined(SDVersion)
         File recipeFile;
 #endif
