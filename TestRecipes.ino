@@ -1,37 +1,64 @@
-#include "TestRecipes.h"
-#include "src/recipes/recipes.h"
+// BOF preprocessor bug prevent - insert me on top of your arduino-code
+#if 1
+__asm volatile ("nop");
+#endif
 
-IO      myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
-recipes myrecipes; //Defintion of recipe file
+#include "TestRecipes.h"
+//Don't inlude, IO.h. correct IO is loaded in Testrecipes.h //.
+
+IO * myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
+recipes * myrecipes; //Defintion of recipe file
 
 void setup(){
-  myIO.initSerial();
+	myIO->initSerial();
 }
 
 int main(){
+  char filename[] = "RECIPES.CSV";
+  char m;
+
+  //myIO->serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
+  // myIO->serialPrintln(1000);
   
-  myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
-
   /* check if Recipes file exists */
-  char* filename = (char*)"RECIPES.CSV";
-  bool recipeFile = myIO.checkFile(filename);
-  if(!recipeFile)
-    {
-      myIO.serialPrintln("Failed to open file for writing recipes file");
-      return 0;
-    }
+  
+  myIO = new IO(filename);
+  
+  if(!myIO->recipeFileavailable()){
+    myIO->serialPrintln((char*)"Failed to open file for writing recipes file");
+    return 0;
+  }
+  
+  /* Test if file can be correctly read: Read file contents character
+     by character and display on command line or serial monitor until EOF*/ 
+  // m = myIO->recipeFileread();
+  // myIO->serialPrint(&m);
+  // while(myIO->recipeFileavailable()){
+    // myIO->serialPrint(&m);
+    // m = myIO->recipeFileread();
+  // }
+  // myIO->recipeFileclose();
 
-  /* Read file contents character by character and display on command
-     line or serial monitor */
-  while(myIO.recipeFileavailable())
-    {
-      myIO.serialPrint((char*)myIO.recipeFileread());
-    }
-  myIO.recipeFileclose();
-    
   /* Read Recipes from file */
-  int numRecipes= myrecipes.LoadRecipes(myrecipes.recipes_array);
-  myIO.serialPrint("Number of recipes found : ");
-  myIO.serialPrintln((char *)numRecipes);
+  myIO = new IO(filename);
+  int numRecipes= myrecipes->LoadRecipes();
+  myIO->serialPrintln((char*)"");
+  myIO->serialPrint((char*)"Number of recipes found : ");
+  myIO->serialPrint(numRecipes+1); // numRecipes starts from 0
+  // m=numRecipes+'0';//This trick will only work for num [0..9]
+  // myIO->serialPrintln(&m);
+  myIO->recipeFileclose();
 }
 
+
+/* For Arduino */
+bool done = false;
+
+void loop(){
+  // Only run main once
+  if (not done) {
+    done = true;
+    main();
+  }
+  delay(200);
+}

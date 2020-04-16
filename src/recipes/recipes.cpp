@@ -248,7 +248,7 @@ int recipes::LoadRecipes()
 		};//End if readOneLine for entire recipe
 	} 
 	/* For debug, send recipe to serial port for monitoring */
-	/*for (int i=0;i<=recipe::count;i++){
+	for (int i=0;i<=recipe::count;i++){
 		myIO->serialPrintln((char*)"");
 		myIO->serialPrint(recipes_array[i].name); myIO->serialPrint((char*)"  ");
 		myIO->serialPrint((char*)" Number of steps : " );myIO->serialPrint(recipes_array[i].recipe_sequence.length);
@@ -265,7 +265,7 @@ int recipes::LoadRecipes()
 			myIO->serialPrint((char*)"] ");
 			myIO->serialPrintln((char*)"");
 		}
-	}*/
+	}
 	return recipe::count; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
 

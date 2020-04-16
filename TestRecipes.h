@@ -1,18 +1,19 @@
 #ifndef TestRecipes_h
 #define TestRecipes_h
+
 /* Define what you are compiling for here */
-#define stdioVersion // Version that we can test on a PC
+//#define stdioVersion // Version that we can test on a PC
 //#define SDVersion // Version that will run on an Arduino
 
-#if defined(stdioVersion)
-/* Library for file-io if we are compiling for stdio */
-#include "fileStdio/IO.h"
-#elif defined(SDVersion)
-/* Library for file IO if we are compiling for Arduino and Flashcard */
-#include <Arduino.h>
-#include "fileSD/IO.h"
-#endif
-
+/* #if defined(stdioVersion) */
+/* /\* Library for file-io if we are compiling for stdio *\/ */
+/* #include "src/fileStdio/IO.h" */
+/* #elif defined(SDVersion) */
+/* /\* Library for file IO if we are compiling for Arduino and Flashcard *\/ */
+/* #include <Arduino.h> */
+/* #include "src/fileSD/IO.h" */
+/* #endif */
+#include "./src/fileIO/IO.h"
 #include "./src/recipes/recipes.h"
 
 /* myIO needs to be known to recipes.cpp */
