@@ -41,24 +41,24 @@ void led::Set_LED_color(int color, int intensity)
       // ledcWrite(LEDChannelGreen, 0);
       // ledcWrite(LEDChannelBlue, 0);
       //      Vrefs.Vref=Vrefs.Vred;//Not elegant, update. We don't need Vref.Vref. LEON
-      cout << "Switched to Red, intensity: ";
-      cout << intensity << endl;
+      myIO->serialPrint((char*) "Switched to Red, intensity: ");
+      myIO->serialPrint(intensity);
       break;
   case GREEN: 
       // ledcWrite(LEDChannelRed, 0);
       // ledcWrite(LEDChannelGreen, intensity);
       // ledcWrite(LEDChannelBlue, 0);
       //Vrefs.Vref=Vrefs.Vgreen;
-      cout << "Switched to Green, intensity: ";
-      cout << intensity << endl;
+      myIO->serialPrint((char*)"Switched to Green, intensity: ");
+      myIO->serialPrint(intensity);
       break;
   case BLUE: 
       // ledcWrite(LEDChannelRed, 0);
       // ledcWrite(LEDChannelGreen, 0);
       // ledcWrite(LEDChannelBlue, intensity);
       //Vrefs.Vref=Vrefs.Vblue;
-      cout << "Switched to Blue, intensity: ";
-      cout << intensity << endl;
+      myIO->serialPrint((char*)"Switched to Blue, intensity: ");
+      myIO->serialPrint(intensity);
       break;
   }
 }

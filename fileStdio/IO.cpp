@@ -35,11 +35,11 @@ bool IO::checkFile(char* filename) {
   // THIS NEED TO BE DONE:
   //recipeFile = SD.open("/RECIPES.CSV"); // recipeFile is global to IO.h
   if (recipeFile_.good()) {
-	  cout << "File checked" << endl; 
+	  serialPrintln((char*)"File checked"); 
       return true;
     }
   else {
-	  cout << "File not exists" << endl;
+	  serialPrintln((char*)"File not exists");
     return false;
   }
 }

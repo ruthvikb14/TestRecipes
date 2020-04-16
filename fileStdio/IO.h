@@ -4,10 +4,10 @@
 
 #include <stdio.h>
 #include<fstream>
-#include <sstream>
-#include<iostream>
+//#include <sstream>
+//#include<iostream>
 #include <cstring>
-#include<cstdlib>
+//#include<cstdlib>
 
 using namespace std;
  

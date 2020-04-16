@@ -300,7 +300,7 @@ recipe_array: array of recipes describing measurement procedure
 recipe_num: which recipe the user selected
 
 */
-
+/*
 void recipes::program_init(int recipe_num)
 {   
 	unsigned int B_nr_set; 
@@ -338,4 +338,4 @@ void recipes::program_init(int recipe_num)
 		LEDColor_array[i] = recipes_array[recipe_num].recipe_sequence.led[i].color;
 		LEDInt_array[i]   = recipes_array[recipe_num].recipe_sequence.led[i].intensity;
 	}
-}
+}*/
