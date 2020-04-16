@@ -26,7 +26,7 @@ struct GradPars{
 	double grad_x[MaxSequenceLength];
 	double grad_y[MaxSequenceLength];
 	double grad_z[MaxSequenceLength];
-}
+};
 
 /* Definition of a measurement sequence in a recipe */
 struct sequence {

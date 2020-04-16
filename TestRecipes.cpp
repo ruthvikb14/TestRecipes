@@ -37,6 +37,7 @@ int main(){
 
   /* Read Recipes from file */
   myIO = new IO(filename);
+  //myrecipes->program_init(1);
   int numRecipes= myrecipes->LoadRecipes();
   myIO->serialPrintln((char*)"");
   myIO->serialPrint((char*)"Number of recipes found : ");
