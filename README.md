@@ -1,4 +1,8 @@
 # TestRecipes
 Testing MAGOD Recipes 
 
-This repo contains the c++ codes of the MAGOD recipes and I have created this because I don't want to mess with the original files and after successful attempt we can merge the files
+This repo contains MAGOD Test recipes.
+ 
+Modified the recipes.h, recipes.cpp, IO.h and IO.cpp
+
+Problem in intializing the extern variables in recipes.cpp(recipes::program_init function)
