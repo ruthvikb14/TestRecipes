@@ -10,14 +10,16 @@ void setup(){
 
 int main(){
   
-  myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
+  //myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
 
   /* check if Recipes file exists */
   char* filename = (char*)"RECIPES.CSV";
+  //char filename[] = "RECIPES.CSV";
+  myIO = new IO(filename);
   bool recipeFile = myIO.checkFile(filename);
   if(!recipeFile)
     {
-      myIO.serialPrintln("Failed to open file for writing recipes file");
+      myIO.serialPrintln((char*)"Failed to open file for writing recipes file");
       return 0;
     }
 
@@ -31,7 +33,10 @@ int main(){
     
   /* Read Recipes from file */
   int numRecipes= myrecipes.LoadRecipes(myrecipes.recipes_array);
-  myIO.serialPrint("Number of recipes found : ");
-  myIO.serialPrintln((char *)numRecipes);
+  myIO.serialPrint((char*)"Number of recipes found : ");
+  myIO.serialPrintln(numRecipes);
 }
 
+void loop(){
+  main();
+  }

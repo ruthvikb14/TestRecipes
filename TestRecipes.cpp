@@ -10,8 +10,7 @@ void setup(){
 }
 
 int main(){
-  char filename[] = "RECIPES.CSV";
-  char m;
+  char filename[] = "RECIPES1.CSV";
 
   //myIO->serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
   // myIO->serialPrintln(1000);
@@ -36,12 +35,12 @@ int main(){
   // myIO->recipeFileclose();
 
   /* Read Recipes from file */
-  myIO = new IO(filename);
+  //myIO = new IO(filename);
   //myrecipes->program_init(1);
   int numRecipes= myrecipes->LoadRecipes();
   myIO->serialPrintln((char*)"");
   myIO->serialPrint((char*)"Number of recipes found : ");
-  myIO->serialPrint(numRecipes+1); // numRecipes starts from 0
+  myIO->serialPrintln(numRecipes+1); // numRecipes starts from 0
   // m=numRecipes+'0';//This trick will only work for num [0..9]
   // myIO->serialPrintln(&m);
   myIO->recipeFileclose();

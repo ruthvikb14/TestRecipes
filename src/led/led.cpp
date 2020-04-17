@@ -7,16 +7,6 @@
 //#include "Arduino.h"
 #include "led.h"
 
-// void ledcSetup(const int x, const int y, const int z){
-	
-// }
-// void ledcAttachPin(const int a, const int b){
-	// a = b;
-// }
-// void ledcWrite(const int c, int d){
-	// c = d;
-// }
-
 //Constructor
 led::led(){
   int LEDs[] = {RED, GREEN, BLUE}; /* I think I do this twice. Check! LEON */

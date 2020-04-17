@@ -23,9 +23,9 @@ struct LEDpars
 
 /* Definition of Grad Paramters*/
 struct GradPars{
-	double grad_x[MaxSequenceLength];
-	double grad_y[MaxSequenceLength];
-	double grad_z[MaxSequenceLength];
+	double grad_x;
+	double grad_y;
+	double grad_z;
 };
 
 /* Definition of a measurement sequence in a recipe */
@@ -36,7 +36,7 @@ struct sequence {
 	double  Bz[MaxSequenceLength]; 
 	double  time[MaxSequenceLength]; //time in ms for this step
 	LEDpars led[MaxSequenceLength];  //Struct of led parameters
-	//GradPars grad; //TBD LEON
+	GradPars grad[MaxSequenceLength]; //TBD LEON
 };
 
 /* Definition of recipe */
