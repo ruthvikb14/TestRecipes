@@ -2,10 +2,11 @@
 #define TestRecipes_h
 
 /* Define what you are compiling for here */
-#define stdioVersion // Version that we can test on a PC
-//#define SDVersion // Version that will run on an Arduino
 
-#include "./src/fileIO/IO.h"
+/* Library for file-io if we are compiling for stdio */
+#include "src/fileIO/IO.h"
+
+
 #include "./src/recipes/recipes.h"
 
 /* myIO needs to be known to recipes.cpp */

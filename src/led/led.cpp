@@ -4,18 +4,12 @@
  Controls led color
  Tijmen Hageman, Jordi Hendrix, Hans Keizer, Leon Abelmann 
 */
-//#include "Arduino.h"
-#include "led.h"
+#if defined(SDVersion)
+/*IO for serial port on Arduino */
+#include <Arduino.h>
+#endif
 
-// void ledcSetup(const int x, const int y, const int z){
-	
-// }
-// void ledcAttachPin(const int a, const int b){
-	// a = b;
-// }
-// void ledcWrite(const int c, int d){
-	// c = d;
-// }
+#include "led.h"
 
 //Constructor
 led::led(){

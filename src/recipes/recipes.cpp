@@ -2,16 +2,32 @@
 
 #define MAXPARSTRINGS 10 // Size of array that holds parameter names
 #define MAX_LENGTH 80
+
+unsigned int B_nr_set; 
+unsigned long Switching_time[B_NR_MAX]; 
+double B_arrayfield_x[B_NR_MAX];
+double B_arrayfield_y[B_NR_MAX];
+double B_arrayfield_z[B_NR_MAX];
+int LEDColor_array[B_NR_MAX];
+int LEDInt_array[B_NR_MAX];
+bool Gradient_x[B_NR_MAX];
+bool Gradient_y[B_NR_MAX];
+bool Gradient_z[B_NR_MAX];
+
+void delay(int val){
+	for(int i; i<val; i++);
+}
+
+
 //Constructor
 recipes::recipes(){ 
   //Nothing to do
 };
 
-int recipe::count = -1;
+int recipe::count = -1; // For counting number of recipes
+int ln_count = 0; // For counting the lines in the csv file
 
-void delay(int val){
-	for(int i; i<val; i++);
-}
+
 
 /* Read one line from file, return store into line. Return true if end of line
 was found */
@@ -43,7 +59,8 @@ bool readOneLine(char* line){
 		}
 	}
 	// myIO->serialPrint((char*)"Line found: ");
-	//myIO->serialPrintln(line);				
+	//myIO->serialPrintln(line);
+	ln_count++;
 	return linefound;
 }
 
@@ -72,16 +89,18 @@ int readColumns(char* line, const char* ch, char * col[], int numCol){
 
 
 /* Strip first and last quotes of text string. NOT TESTED! */
-bool stripQuotes(char * str){
+char* stripChar(char * str){
 	//Should check if string really has quotes! Leon
-	char * temp = new char[strlen(str)];
-	//myIO->serialPrintln((char*)"stripQuotes: ");myIO->serialPrintln(str);
-	strncpy(temp, str + 1, strlen(str)-2);
-	str = temp;
-	// myIO->serialPrint((char *)" -> ");
-	//myIO->serialPrint(str);
-  
-	return true;
+	int i,j;
+    for (i = 0; str[i] != '\0'; ++i) {
+        while (!((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || str[i] == '\0' || str[i] == ' ')) {
+            for (j = i; str[j] != '\0'; ++j) {
+                str[j] = str[j + 1];
+            }
+            str[j] = '\0';
+        }
+    }
+	return str;
 }
 
 /* Are two strings equal? Ignore case */
@@ -94,7 +113,7 @@ bool comparestring(const char* s1, const char* s2){
 /* Which MagOD version do we have. Return 0 if not found */
 int getversion(char* str){
 	int version = 0;
-	//cout << "getVersion: str= " << str << endl;
+	//myIO->serialPrintln((char*)"getVersion: str= ");myIO->serialPrint(str);
 	if (comparestring(str,"MAGOD1")) version = 1;
 	else if (comparestring(str,"MAGOD2")) version = 2;
     else myIO->serialPrintln((char*)"Version not recognized");
@@ -128,7 +147,7 @@ int getLEDColor(char* str){
 /* Read one line of the sequence and store the field and led parameter at location 'num'*/
 bool readSequenceStep(char* line, sequence& seq, int num){
 	bool stepFound=false;
-	int N=7;
+	int N=10;
 	char * col[N]; //We need to read 7 columns (0:6)
 	int numCol; //Number of columns read
 	
@@ -136,7 +155,18 @@ bool readSequenceStep(char* line, sequence& seq, int num){
 		col[i] = new char[MAX_LENGTH];
 	}
 	numCol = readColumns(line, ",", col, N);
-	//	 We expect six columns  (col[0] is empty):
+	// Throws error message when negative value(s) detected and corrects to zero
+	for(int j = 1; j < N; j++){
+		if(atof(col[j]) < 0 && j!= 5){
+			col[j] = NULL;
+			myIO->serialPrintln("");
+			myIO->serialPrint((char*)"Negative value(s) detected on line number: ");
+			myIO->serialPrint(ln_count);
+			myIO->serialPrintln((char*)" and corrected to ZERO.");
+			//break;
+		}
+	}
+	//	 We expect nine columns  (col[0] is empty):
 	if (numCol>5){
 		seq.Bx[num]            = atof(col[1]);//B_x[mT]
 		seq.By[num]            = atof(col[2]);//B_y[mT]
@@ -144,9 +174,13 @@ bool readSequenceStep(char* line, sequence& seq, int num){
 		seq.time[num]          = atof(col[4])*1000;//T_switch[ms]
 		seq.led[num].color     = getLEDColor(col[5]);//LED Color (RED, GREEN, BLUE)
 		seq.led[num].intensity = atoi(col[6]);//LED Intensity
+		seq.grad[num].grad_x = atof(col[7]);
+		seq.grad[num].grad_y = atof(col[8]);
+		seq.grad[num].grad_z = atof(col[9]);
 		//Check if all values make sense:
 		stepFound=(seq.Bx[num]>=0 && seq.By[num]>=0 && seq.Bz[num]>=0 &&
-	       seq.time[num]>=0 && seq.led[num].color>=0 && seq.led[num].intensity >=0);
+	       seq.time[num]>=0 && seq.led[num].color>=0 && seq.led[num].intensity >=0 &&
+		   seq.grad[num].grad_x>=0 && seq.grad[num].grad_y>=0 && seq.grad[num].grad_z>=0);
 	}
 	return stepFound;
 }
@@ -154,7 +188,6 @@ bool readSequenceStep(char* line, sequence& seq, int num){
 /* Read sequence of steps from file, until @ endSequence is found */
 bool readSequence(char* line, sequence& seq){
 	bool endSequence=false;
-	//char * line;
 	int N=2;
 	char * col[N]; //We need to read only 2 columns to find endSequence
 	int numCol; // number of columns read
@@ -187,7 +220,7 @@ bool readSequence(char* line, sequence& seq){
 int recipes::LoadRecipes()
 {
 	recipe * recipes_array = new recipe[MaxRecipes];
-	int linecount = 0; //For debug only
+	//int linecount = 0; //For debug only
 	bool error = false;
 	int version = 0 ;
 	char* line = new char[MAX_LENGTH];
@@ -203,7 +236,9 @@ int recipes::LoadRecipes()
 	while(myIO->recipeFileavailable() && not error){
 		// Read one line from the recipe file, ignore comment lines
 		if (readOneLine(line)) {
-			linecount++;
+			//linecount++;
+			// myIO->serialPrintln(linecount);
+			// myIO->serialPrintln(ln_count);
 			if(line[0] == '@'){
 			// Split line into column fields at comma's
 				numCol = readColumns(line, ",", col, N);
@@ -220,7 +255,7 @@ int recipes::LoadRecipes()
 				if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes && not error){
 					// The recipe description is on the same line in col[2]:
 					recipe::count++;//recipeNumber initialized at -1.
-					strncpy(recipes_array[recipe::count].name,col[2],strlen(col[2])+1);
+					strncpy(recipes_array[recipe::count].name,stripChar(col[2]),strlen(col[2])+1);
 					myIO->serialPrintln(recipes_array[recipe::count].name);
 					bool recipeEnd=false;
 					//Keep reading until you find EndRecipe
@@ -234,6 +269,7 @@ int recipes::LoadRecipes()
 							}	
 							// Sequence
 							if (comparestring(col[1],"Sequence")){
+								//myIO->serialPrintln(linecount);
 								if (not readSequence(line, recipes_array[recipe::count].recipe_sequence)){
 									myIO->serialPrintln((char*)"Error, sequence not found");
 									error=true;
@@ -246,9 +282,9 @@ int recipes::LoadRecipes()
 				};//end if col[1]=Recipe
 			};// end if "@"
 		};//End if readOneLine for entire recipe
-	} 
+	}
 	/* For debug, send recipe to serial port for monitoring */
-	for (int i=0;i<=recipe::count;i++){
+	/*for (int i=0;i<=recipe::count;i++){
 		myIO->serialPrintln((char*)"");
 		myIO->serialPrint(recipes_array[i].name); myIO->serialPrint((char*)"  ");
 		myIO->serialPrint((char*)" Number of steps : " );myIO->serialPrint(recipes_array[i].recipe_sequence.length);
@@ -261,11 +297,14 @@ int recipes::LoadRecipes()
 			myIO->serialPrint(recipes_array[i].recipe_sequence.Bz[j]);myIO->serialPrint((char*)", ");
 			myIO->serialPrint(recipes_array[i].recipe_sequence.time[j]);myIO->serialPrint((char*)", ");
 			myIO->serialPrint(recipes_array[i].recipe_sequence.led[j].color);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.led[j].intensity);
+			myIO->serialPrint(recipes_array[i].recipe_sequence.led[j].intensity);myIO->serialPrint((char*)", ");
+			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_x);myIO->serialPrint((char*)", ");
+			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_y);myIO->serialPrint((char*)", ");
+			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_z);
 			myIO->serialPrint((char*)"] ");
 			myIO->serialPrintln((char*)"");
 		}
-	}
+	}*/
 	return recipe::count; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
 
@@ -300,19 +339,9 @@ recipe_array: array of recipes describing measurement procedure
 recipe_num: which recipe the user selected
 
 */
-/*
+
 void recipes::program_init(int recipe_num)
 {   
-	unsigned int B_nr_set; 
-	unsigned long Switching_time[B_NR_MAX]; 
-	double B_arrayfield_x[B_NR_MAX];
-	double B_arrayfield_y[B_NR_MAX];
-	double B_arrayfield_z[B_NR_MAX];
-	int LEDColor_array[B_NR_MAX];
-	int LEDInt_array[B_NR_MAX];
-	bool Gradient_x[B_NR_MAX];
-	bool Gradient_y[B_NR_MAX];
-	bool Gradient_z[B_NR_MAX];
 	
 	recipe * recipes_array = new recipe[MaxRecipes];
 	myIO->serialPrintln((char*)"Starting program_init");delay(1000);
@@ -338,4 +367,4 @@ void recipes::program_init(int recipe_num)
 		LEDColor_array[i] = recipes_array[recipe_num].recipe_sequence.led[i].color;
 		LEDInt_array[i]   = recipes_array[recipe_num].recipe_sequence.led[i].intensity;
 	}
-}*/
+}

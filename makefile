@@ -1,5 +1,5 @@
 CC=g++ #Compiler
-CFLAGS=-D stdioVersion -I #Compiler directives
+CFLAGS=-I src/fileIO/include #Compiler directives
 
 # Macro for MagOD object files
 #OBJ_RECIPES =
