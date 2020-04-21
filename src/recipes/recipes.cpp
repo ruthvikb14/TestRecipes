@@ -71,22 +71,23 @@ int readColumns(char* line, char ch, char * col[], int numCol){
 	int i=0; //counts columns
 	int pos = 0;
 	char * ln;
-	//myIO->serialPrintln((char*)"readColumns: ");myIO->serialPrint(line);
+	myIO->serialPrint((char*)"readColumns: Line= ");
+	myIO->serialPrintln(line);
 	// As long as there is at least two characters left and we want more columns
 	while (strlen(line) > 1 && i<numCol){
-	    //ln =strchr(line, ch);// find location of first delimeter
+	  //ln =strchr(line, ch);// find location of first delimeter
 		pos = strchr(line, ch) - line;
-		myIO->serialPrintln(pos);
+		myIO->serialPrint("Pos: ");myIO->serialPrintln(pos);
 		// get part before delimeter
 		for(int j=0; j< pos; j++){
 			col[i][j] = line[j];
 		}
 		col[i][pos]=NULL;
-		// myIO->serialPrintln(col[i]);
+		myIO->serialPrint("Col[i]: ");myIO->serialPrintln(col[i]);
 		i++;
 		line+= pos+1; // cut that part of the line, including delimeter
-		// myIO->serialPrintln((char*)"After remove: ");
-		// myIO->serialPrintln(line);
+		myIO->serialPrint((char*)"Line after remove: ");
+		myIO->serialPrintln(line);
 	}
 	return i;//Length of col, [0..i-1].
 }

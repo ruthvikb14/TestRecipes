@@ -1,0 +1,698 @@
+                 **********************************************
+                                  MAGOD Recipes By
+                     Prof. Dr. Leon Abelmann & B.S.R.Ruthvik
+                 **********************************************
+****File checked****
+Line found: 
+Line found: ,,,,,,,,,
+Line found: 
+Line found: @,Version,MAGOD2,,,,,,,
+readColumns: 
+@,Version,MAGOD2,,,,,,,@
+After remove: 
+Version,MAGOD2,,,,,,,Version
+After remove: 
+MAGOD2,,,,,,,MAGOD2
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Parameters,,,,,,,,
+readColumns: 
+@,Parameters,,,,,,,,@
+After remove: 
+Parameters,,,,,,,,Parameters
+After remove: 
+,,,,,,,MAGOD2
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: ,B_x,B_y,B_z,T_switch,LED_Color,LED_Intensity,Grad_x,Grad_y,Grad_z
+Line found: ,,,,,,,,,
+Line found: 
+Line found: ,,,,,,,,,
+Line found: 
+Line found: @,Recipe,Cmag Green,,,,,,,
+readColumns: 
+@,Recipe,Cmag Green,,,,,,,@
+After remove: 
+Recipe,Cmag Green,,,,,,,Recipeters
+After remove: 
+Cmag Green,,,,,,,Cmag Green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@
+After remove: 
+N_cycles,0,,,,,,,N_cyclesrs
+After remove: 
+0,,,,,,,0mag Green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@
+After remove: 
+Sequence,,,,,,,,Sequencers
+After remove: 
+,,,,,,,0mag Green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0.5,0,0,10,GREEN,60,1,1,1
+Line found: ,0,1,0,20,GREEN,60,1,1,1
+Line found: ,1,0,0,20,GREEN,60,1,1,1
+Line found: ,0,0.5,0,30,GREEN,60,1,1,1
+Line found: ,0.5,0,0,29.5,GREEN,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0mag Green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0mag Green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: ,,,,,,,,,
+Line found: 
+Line found: @,Recipe,Cmag Red,,,,,,,
+readColumns: 
+@,Recipe,Cmag Red,,,,,,,@_y,Grad_z
+After remove: 
+Recipe,Cmag Red,,,,,,,Recipeipece
+After remove: 
+Cmag Red,,,,,,,Cmag Reden
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@_y,Grad_z
+After remove: 
+N_cycles,0,,,,,,,N_cyclesece
+After remove: 
+0,,,,,,,0mag Reden
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@_y,Grad_z
+After remove: 
+Sequence,,,,,,,,Sequenceece
+After remove: 
+,,,,,,,0mag Reden
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0.5,0,0,10,RED,60,1,1,1
+Line found: ,0,1,0,20,RED,60,1,1,1
+Line found: ,1,0,0,20,RED,60,1,1,1
+Line found: ,0,0.5,0,30,RED,60,1,1,1
+Line found: ,0.5,0,0,29.5,RED,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0mag Reden
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0mag Reden
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: ,,,,,,,,,
+Line found: @,Recipe,Marathon green,,,,,,,
+readColumns: 
+@,Recipe,Marathon green,,,,,,,@_y,Grad_z
+After remove: 
+Recipe,Marathon green,,,,,,,Recipeipece
+After remove: 
+Marathon green,,,,,,,Marathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@_y,Grad_z
+After remove: 
+N_cycles,0,,,,,,,N_cyclesece
+After remove: 
+0,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@_y,Grad_z
+After remove: 
+Sequence,,,,,,,,Sequenceece
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0,0,1,800,GREEN,60,1,1,1
+Line found: ,0,0,1,100,GREEN,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: ,,,,,,,,,,
+Line found: @,Recipe,Cmag Green,,,,,,,
+readColumns: 
+@,Recipe,Cmag Green,,,,,,,@_y,Grad_z
+After remove: 
+Recipe,Cmag Green,,,,,,,Recipeipece
+After remove: 
+Cmag Green,,,,,,,Cmag Greenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@_y,Grad_z
+After remove: 
+N_cycles,0,,,,,,,N_cyclesece
+After remove: 
+0,,,,,,,0mag Greenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@_y,Grad_z
+After remove: 
+Sequence,,,,,,,,Sequenceece
+After remove: 
+,,,,,,,0mag Greenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0.5,0,0,10,GREEN,60,1,1,1
+Line found: ,0,1,0,20,GREEN,60,1,1,1
+Line found: ,1,0,0,20,GREEN,60,1,1,1
+Line found: ,0,0.5,0,30,GREEN,60,1,1,1
+Line found: ,0.5,0,0,29.5,GREEN,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0mag Greenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0mag Greenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,Recipe,Cmag Red,,,,,,,
+readColumns: 
+@,Recipe,Cmag Red,,,,,,,@_y,Grad_z
+After remove: 
+Recipe,Cmag Red,,,,,,,Recipeipece
+After remove: 
+Cmag Red,,,,,,,Cmag Redenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@_y,Grad_z
+After remove: 
+N_cycles,0,,,,,,,N_cyclesece
+After remove: 
+0,,,,,,,0mag Redenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@_y,Grad_z
+After remove: 
+Sequence,,,,,,,,Sequenceece
+After remove: 
+,,,,,,,0mag Redenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0.5,0,0,10,RED,60,1,1,1
+Line found: ,0,1,0,20,RED,60,1,1,1
+Line found: ,1,0,0,20,RED,60,1,1,1
+Line found: ,0,0.5,0,30,RED,60,1,1,1
+Line found: ,0.5,0,0,29.5,RED,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0mag Redenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0mag Redenreen
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,Recipe,Marathon green,,,,,,,
+readColumns: 
+@,Recipe,Marathon green,,,,,,,@_y,Grad_z
+After remove: 
+Recipe,Marathon green,,,,,,,Recipeipece
+After remove: 
+Marathon green,,,,,,,Marathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: @,N_cycles,0,,,,,,,
+readColumns: 
+@,N_cycles,0,,,,,,,@_y,Grad_z
+After remove: 
+N_cycles,0,,,,,,,N_cyclesece
+After remove: 
+0,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,Sequence,,,,,,,,
+readColumns: 
+@,Sequence,,,,,,,,@_y,Grad_z
+After remove: 
+Sequence,,,,,,,,Sequenceece
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: 
+Line found: ,0,0,1,800,GREEN,60,1,1,1
+Line found: ,0,0,1,100,GREEN,60,1,1,1
+Line found: @,EndSequence,,,,,,,,
+readColumns: 
+@,EndSequence,,,,,,,,@_y,Grad_z
+After remove: 
+EndSequence,,,,,,,,EndSequence
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: @,EndRecipe,,,,,,,,
+readColumns: 
+@,EndRecipe,,,,,,,,@_y,Grad_z
+After remove: 
+EndRecipe,,,,,,,,EndRecipece
+After remove: 
+,,,,,,,0arathon green
+After remove: 
+,,,,,,
+After remove: 
+,,,,,
+After remove: 
+,,,,
+After remove: 
+,,,
+After remove: 
+,,
+After remove: 
+,
+After remove: 
+Line found: ,,,,,,,,,,,
+
+Number of recipes found : 0.0
