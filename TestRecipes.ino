@@ -46,6 +46,7 @@ int main(int argc, char** argv){
 
 #if defined(ESP_PLATFORM)
 char* file[]= {"\0","/RECIPES.CSV"};
+int n_arg = sizeof(file)/sizeof(file[0]);
 
 void setup(){
   myIO->initSerial();
@@ -56,7 +57,7 @@ void setup(){
 void loop(){
   if (not done) {
     done = true;
-    main(1, file);
+    main(n_arg, file);
   }
   delay(200);
 }
