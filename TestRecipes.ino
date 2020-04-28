@@ -5,25 +5,22 @@ recipes * myrecipes; //Defintion of recipe file
 
 bool done = false;
 
-char* file(){
-  char* filename;
-  #if defined(stdioVersion)
-    filename = "RECIPES1.csv";
-  #elif defined(ESP_PLATFORM)
-    filename = "/RECIPES.csv";
-  #endif
-  myIO->serialPrintln(filename);
-  return filename;
-}
-
-int main(){
+int main(int argc, char** argv){
   
+  char filename[20];
   //myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
-
-  //file();
-  //myIO->initSerial();
   
-  myIO = new IO(file());
+  #if defined(stdioVersion)
+    myIO->initSerial();
+  #endif
+  
+  myIO->serialPrint((char*)"Number of arguments passed: ");
+  myIO->serialPrintln(argc);
+  myIO->serialPrintln((char*)"");
+  
+  strcpy(filename, argv[1]);
+  
+  myIO = new IO(filename);
   /* check if Recipes file exists */
   
   bool check = myIO->checkFile();
@@ -48,6 +45,8 @@ int main(){
 }
 
 #if defined(ESP_PLATFORM)
+char* file[]= {"\0","/RECIPES.CSV"};
+
 void setup(){
   myIO->initSerial();
   //main();
@@ -57,8 +56,8 @@ void setup(){
 void loop(){
   if (not done) {
     done = true;
-    main();
+    main(1, file);
   }
   delay(200);
-  }
+}
 #endif

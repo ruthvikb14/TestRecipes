@@ -2,8 +2,8 @@
 #define TestRecipes_h
 
 /* Define what you are compiling for here */
-#define stdioVersion // Version that we can test on a PC
-//#define ESP_PLATFORM // Version that will run on an Arduino
+//#define stdioVersion // Version that we can test on a PC
+#define ESP_PLATFORM // Version that will run on an Arduino
 
 #include "src/fileIO/IO.h"
 
