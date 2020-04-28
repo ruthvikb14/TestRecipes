@@ -1,18 +1,33 @@
 #ifndef IO_h
 #define IO_h
 
-#include <cstring>
-#include <stdio.h>
+#if defined(stdioVersion)
 /*IO for command line on PC */
+#warning "Compiling for command line stdio"
+#include <stdio.h>
 #include<fstream>
+//#include <sstream>
+//#include<iostream>
+#include <cstring>
+//#include<cstdlib>
 
 using namespace std;
 
+#elif defined(ESP_PLATFORM)
+/*IO for serial port on Arduino */
+#warning "Compiling for Arduino serial"
+#include <Arduino.h>
+#include <SD.h>
+#endif
+
 class IO {
 	private:
-    // Quick fix, REMOVE LATER!!! LEON
-    ifstream recipeFile_; // Global variable to remember the file handle
-
+        // Quick fix, REMOVE LATER!!! LEON
+#if defined(stdioVersion)
+        ifstream recipeFile_; // Global variable to remember the file handle
+#elif defined(ESP_PLATFORM)
+        File recipeFile;
+#endif
 	public:
 	IO(); //constructor
 	IO(char * ); //constructor
@@ -24,7 +39,7 @@ class IO {
 	void serialPrint(char* message);
 	void serialPrintln(char* message);
 	/* Check for presence of file */
-	bool checkFile();
+	bool checkFile(char* filename);
 	/* Check if recipefile still has on more character */
 	bool recipeFileavailable();
 	/* Read next character from recipe file */

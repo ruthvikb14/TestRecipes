@@ -25,7 +25,7 @@ int main(int argc, char** argv){
   
 	myIO = new IO(filename);
   
-	bool check = myIO->checkFile();
+	bool check = myIO->checkFile(filename);
   
 	if(!check){
 		myIO->serialPrintln((char*)"Failed to open file for writing recipes file");
@@ -39,3 +39,12 @@ int main(int argc, char** argv){
 	myIO->recipeFileclose();
 }
 
+#if defined(ESP_PLATFORM)
+void setup(){
+  //TO BE DONE
+}
+
+void loop(){
+  //do nothing
+}
+#endif

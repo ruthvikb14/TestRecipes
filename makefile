@@ -1,15 +1,14 @@
 CC=g++ #Compiler
-CFLAGS=-I src/fileIO/include #Compiler directives
+#CFLAGS=-I src/fileIO/include #Compiler directives
+CFLAGS=-D stdioVersion #Compiler directive for command line version
 
 # Macro for MagOD object files
-#OBJ_RECIPES =
 OBJ_RECIPES = src/recipes/recipes.o src/led/led.o
 
 # Macro for object files
 OBJ = TestRecipes.o src/fileIO/IO.o $(OBJ_RECIPES)
 
 # Macro for MagOD includes files:
-#DEPS_RECIPES=
 DEPS_RECIPES = src/recipes/recipes.h src/led/led.h 
 
 # Macro for all dependencies
@@ -22,3 +21,8 @@ DEPS = TestRecipes.h src/fileIO/IO.h $(DEPS_RECIPES)
 # Dependencies of TestRecipes and what to include
 TestRecipes: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
+
+# Remove all compiled files
+clean :
+	@rm -f TestRecipes src/fileIO/IO.o src/recipes/recipes.o \
+	src/led/led.o
