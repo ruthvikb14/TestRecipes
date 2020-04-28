@@ -8,12 +8,9 @@ bool done = false;
 char* file(){
   char* filename;
   #if defined(stdioVersion)
-    //myIO->serialPrint((char*)"Please enter the file name: ");
     filename = "RECIPES1.csv";
-    //scanf("%s", filename);
   #elif defined(ESP_PLATFORM)
     filename = "/RECIPES.csv";
-    //myIO->serialPrintln(filename);
   #endif
   myIO->serialPrintln(filename);
   return filename;

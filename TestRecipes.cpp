@@ -49,7 +49,7 @@ int main(char* argv){
 
 #if defined(ESP_PLATFORM)
 void setup(){
-  myIO->initSerial();
+  //myIO->initSerial();
   //main();
 }
 
