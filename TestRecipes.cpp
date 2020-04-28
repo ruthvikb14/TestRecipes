@@ -1,47 +1,67 @@
 #include "TestRecipes.h"
-//Don't inlude, IO.h. correct IO is loaded in Testrecipes.h //.
-//Don't include any c specific libraries
 
-IO * myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
+IO *  myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
 recipes * myrecipes; //Defintion of recipe file
 
-void setup(){
-	myIO->initSerial();
+bool done = false;
+
+char* file(){
+  char* filename;
+  #if defined(stdioVersion)
+    //myIO->serialPrint((char*)"Please enter the file name: ");
+	filename = "RECIPES1.csv";
+    //scanf("%s", filename);
+  #elif defined(ESP_PLATFORM)
+    filename = "/RECIPES.csv";
+    //myIO->serialPrintln(filename);
+  #endif
+  myIO->serialPrintln(filename);
+  return filename;
 }
 
-int main(){
-  char filename[] = "RECIPES1.CSV";
-
-  //myIO->serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
-  // myIO->serialPrintln(1000);
+int main(char* argv){
   
+  //myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
+
+  //file();
+  myIO->initSerial();
+  
+  myIO = new IO(file());
   /* check if Recipes file exists */
   
-  myIO = new IO(filename);
-  
-  if(!myIO->recipeFileavailable()){
+  bool check = myIO->checkFile();
+  if(!check){
     myIO->serialPrintln((char*)"Failed to open file for writing recipes file");
     return 0;
-  }
-  
-  /* Test if file can be correctly read: Read file contents character
-     by character and display on command line or serial monitor until EOF*/ 
-  // m = myIO->recipeFileread();
-  // myIO->serialPrint(&m);
-  // while(myIO->recipeFileavailable()){
-    // myIO->serialPrint(&m);
-    // m = myIO->recipeFileread();
-  // }
-  // myIO->recipeFileclose();
+    }
 
+  /* Read file contents character by character and display on command
+     line or serial monitor */
+  //while(myIO->recipeFileavailable())
+    //{
+      //myIO->serialPrint((char*)myIO->recipeFileread());
+    //}
+    
   /* Read Recipes from file */
-  //myIO = new IO(filename);
-  //myrecipes->program_init(1);
   int numRecipes= myrecipes->LoadRecipes();
   myIO->serialPrintln((char*)"");
   myIO->serialPrint((char*)"Number of recipes found : ");
-  myIO->serialPrintln(numRecipes+1); // numRecipes starts from 0
-  // m=numRecipes+'0';//This trick will only work for num [0..9]
-  // myIO->serialPrintln(&m);
+  myIO->serialPrintln(numRecipes+1);
   myIO->recipeFileclose();
 }
+
+#if defined(ESP_PLATFORM)
+void setup(){
+  //myIO->initSerial();
+  //main();
+}
+
+
+void loop(){
+  if (not done) {
+    done = true;
+    main();
+  }
+  delay(200);
+  }
+#endif

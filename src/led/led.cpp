@@ -4,7 +4,11 @@
  Controls led color
  Tijmen Hageman, Jordi Hendrix, Hans Keizer, Leon Abelmann 
 */
-//#include "Arduino.h"
+#if defined(ESP_PLATFORM)
+/*IO for serial port on Arduino */
+#include <Arduino.h>
+#endif
+
 #include "led.h"
 
 //Constructor
