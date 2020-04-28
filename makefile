@@ -24,5 +24,5 @@ TestRecipes: $(OBJ)
 
 # Remove all compiled files
 clean :
-	@rm -f TestRecipes src/fileIO/IO.o src/recipes/recipes.o \
-	src/led/led.o
+	@rm -f TestRecipes TestRecipes.o src/fileIO/IO.o \
+	src/recipes/recipes.o src/led/led.o
