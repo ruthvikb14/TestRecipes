@@ -50,6 +50,7 @@ bool readOneLine(char* line){
 			else{
 				endofline = true;
 			}
+		
 		}
 		// Comment line starts with #, ignore it:
 		if (endofline && line[0] == '#') {
@@ -58,6 +59,7 @@ bool readOneLine(char* line){
 		else{
 			linefound=true;
 		}
+	//myIO->serialPrintln(line);
 	}
 	// myIO->serialPrint((char*)"Line found: ");
 	//myIO->serialPrintln(line);

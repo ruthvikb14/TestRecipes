@@ -12,13 +12,15 @@ int main(int argc, char** argv){
   
   #if defined(stdioVersion)
     myIO->initSerial();
+    if(argc==1){
+      myIO->serialPrintln((char*)"Please provide the filename as in the format below");
+      myIO->serialPrintln((char*)"TestRecipes filename (for DOS)");
+      myIO->serialPrintln((char*)"./TestRecipes filename (for Mac)");
+    }
+    strcpy(filename, argv[1]);
+  #elif defined(ESP_PLATFORM)
+    strcpy(filename, argv[0]);
   #endif
-  
-  myIO->serialPrint((char*)"Number of arguments passed: ");
-  myIO->serialPrintln(argc);
-  myIO->serialPrintln((char*)"");
-  
-  strcpy(filename, argv[1]);
   
   myIO = new IO(filename);
   /* check if Recipes file exists */
@@ -33,21 +35,25 @@ int main(int argc, char** argv){
      line or serial monitor */
   //while(myIO->recipeFileavailable())
     //{
-      //myIO->serialPrint((char*)myIO->recipeFileread());
+      //myIO->serialPrintch(myIO->recipeFileread());
     //}
-    
+  //myIO->recipeFileclose();
+  
+  //myIO = new IO(filename); 
+  
   /* Read Recipes from file */
   int numRecipes= myrecipes->LoadRecipes();
   myIO->serialPrintln((char*)"");
   myIO->serialPrint((char*)"Number of recipes found : ");
   myIO->serialPrintln(numRecipes+1);
+  
   myIO->recipeFileclose();
+  
 }
 
 #if defined(ESP_PLATFORM)
-char* file[]= {"\0","/RECIPES.CSV"};
+char* file[]= {"/RECIPES.CSV"};
 int n_arg = sizeof(file)/sizeof(file[0]);
-
 void setup(){
   myIO->initSerial();
   //main();

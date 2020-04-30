@@ -1,5 +1,5 @@
 #include "IO.h"
-#warning "in IO.cpp"
+
 /* ***************************************************************** */
 
 /* IO functions for command line on PC */
@@ -16,7 +16,7 @@ IO::IO(char * fname){
 
 void IO::initSerial(){
 	#if defined(stdioVersion)
-	//#warning "stdioVersion initSerial"
+		//#warning "stdioVersion initSerial"
 		printf("%63s\n", "**********************************************");
 		printf("%50s","MAGOD Recipes By");
 		printf("\n%60s\n", "Prof. Dr. Leon Abelmann & B.S.R.Ruthvik");
@@ -79,7 +79,7 @@ void IO::initSerial(){
 
 void IO::serialPrint(float message) {
 	#if defined(stdioVersion)
-	//#warning "Stdio version serialPrint"
+		//#warning "Stdio version serialPrint"
 		printf("%.1f",message);
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version serialPrint"
@@ -89,7 +89,7 @@ void IO::serialPrint(float message) {
 
 void IO::serialPrintln(float message) {
 	#if defined(stdioVersion)
-	//#warning "Stdio version serialPrintln"
+		//#warning "Stdio version serialPrintln"
 		printf("%.1f\n",message);
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version serialPrintln"
@@ -97,9 +97,19 @@ void IO::serialPrintln(float message) {
 	#endif
 }
 
+void IO::serialPrintch(char message){
+	#if defined(stdioVersion)	
+		//#warning "Stdio version serialPrint"
+		printf("%c",message);
+	#elif defined(ESP_PLATFORM)
+		//#warning "SD version serialPrint"
+		Serial.print(message);
+	#endif
+}
+
 void IO::serialPrint(char * message) {
 	#if defined(stdioVersion)	
-	//#warning "Stdio version serialPrint"
+		//#warning "Stdio version serialPrint"
 		printf("%s",message);
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version serialPrint"
@@ -109,7 +119,7 @@ void IO::serialPrint(char * message) {
 
 void IO::serialPrintln(char * message) {
 	#if defined(stdioVersion)
-	//#warning "Stdio version serialPrintln"
+		//#warning "Stdio version serialPrintln"
 		printf("%s\n",message);
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version serialPrintln"
@@ -122,7 +132,7 @@ bool IO::checkFile() {
   // recipeFile is global to IO.h
 	bool  check_flag = false;
 	#if defined(stdioVersion)
-	//#warning "stdioVersion checkFile"
+		//#warning "stdioVersion checkFile"
 		//recipeFile_.open("RECIPES1.CSV", ios::in);
 		if (recipeFile_.good()) {
 			serialPrintln((char*)"****File checked****"); 
@@ -152,7 +162,7 @@ bool IO::checkFile() {
 bool IO::recipeFileavailable() {
 	bool recipe_flag = false;
 	#if defined(stdioVersion)
-	//#warning "stdioVersion recipeFileavailable"
+		//#warning "stdioVersion recipeFileavailable"
 		recipe_flag = recipeFile_.is_open() && !recipeFile_.eof();
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version recipeFileavailable"
@@ -166,7 +176,7 @@ bool IO::recipeFileavailable() {
 char IO::recipeFileread(){
 	char c;
 	#if defined(stdioVersion)
-	//#warning "stdioVersion recipeFileread"
+		//#warning "stdioVersion recipeFileread"
 		recipeFile_.get(c);
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version recipeFileread"
@@ -179,7 +189,7 @@ char IO::recipeFileread(){
 void IO::recipeFileclose(){
   // THIS NEED TO BE DONE:
 	#if defined(stdioVersion)
-	//#warning "stdioVersion recipeFileclose"
+		//#warning "stdioVersion recipeFileclose"
 		recipeFile_.close();
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version recipeFileclose"

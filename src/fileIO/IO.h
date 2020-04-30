@@ -8,7 +8,6 @@
 /*IO for command line on PC */
 	#warning "Compiling for command line stdio"
 	#include<fstream>
-
 	using namespace std;
 
 #elif defined(ESP_PLATFORM)
@@ -38,6 +37,7 @@ class IO {
 	/* Message to serial monitor */
 	void serialPrint(float message);
 	void serialPrintln(float message);
+	void serialPrintch(char message);
 	void serialPrint(char* message);
 	void serialPrintln(char* message);
 	/* Check for presence of file */

@@ -15,7 +15,7 @@ DEPS_RECIPES = src/recipes/recipes.h src/led/led.h
 DEPS = TestRecipes.h src/fileIO/IO.h $(DEPS_RECIPES)
 
 # All cpp files depend on the includes, so recompile their objects:
-%.o: %.cpp $(DEPS)
+%.o: %.cc $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Dependencies of TestRecipes and what to include
