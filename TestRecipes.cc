@@ -14,7 +14,7 @@ int main(int argc, char** argv){
     myIO->initSerial();
   #endif
   if(argc==1){
-    myIO->serialPrintln((char*)"Please provide the filename  as in the format below");
+    myIO->serialPrintln((char*)"Please provide the filename as in the format below");
     myIO->serialPrintln((char*)"TestRecipes filename (for DOS)");
     myIO->serialPrintln((char*)"./TestRecipes filename (for Mac)");
   }else{
