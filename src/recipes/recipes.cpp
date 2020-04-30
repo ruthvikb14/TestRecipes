@@ -1,24 +1,7 @@
 #include "recipes.h"
 
 #define MAXPARSTRINGS 10 // Size of array that holds parameter names
-#define MAX_LENGTH 80
-
-#if defined(stdioVersion)
-	unsigned int B_nr_set; 
-	unsigned long Switching_time[B_NR_MAX]; 
-	double B_arrayfield_x[B_NR_MAX];
-	double B_arrayfield_y[B_NR_MAX];
-	double B_arrayfield_z[B_NR_MAX];
-	int LEDColor_array[B_NR_MAX];
-	int LEDInt_array[B_NR_MAX];
-	bool Gradient_x[B_NR_MAX];
-	bool Gradient_y[B_NR_MAX];
-	bool Gradient_z[B_NR_MAX];
-
-	void delay(int val){
-		for(int i; i<val; i++);
-	}
-#endif
+#define MAX_LENGTH 80 // Maximum line length
 
 //Constructor
 recipes::recipes(){ 
@@ -27,7 +10,6 @@ recipes::recipes(){
 
 int recipe::count = -1; // For counting number of recipes
 int ln_count = 0; // For counting the lines in the csv file
-
 
 
 /* Read one line from file, return store into line. Return true if end of line
@@ -226,156 +208,172 @@ bool readSequence(char* line, sequence& seq){
 	return endSequence; //If all went well, endSequence is true
 }
 
-/* Load recipes from recipes file and store into array. Returns the
-   number of recipes found */
-int recipes::LoadRecipes()
-{
-	recipe * recipes_array = new recipe[MaxRecipes];
-	//int linecount = 0; //For debug only
-	bool error = false;
-	int version = 0 ;
-	char* line = new char[MAX_LENGTH];
-	int N = 10; // Maximum number of columns we expect to read
-	char* col[N];
-	int numCol; // Number of columns found on line
-	//int recipeNumber; // We can load several recipes, numbered [0..MaxRecipes]
-  
-	for (int i = 0; i < N; i++){
-		col[i] = new char[MAX_LENGTH];
+/* For debugging, print the loaded recipes */
+void serialRecipesPrint(recipe * recipe,int numRecipes){
+  for (int i=0;i<=numRecipes;i++){
+    myIO->serialPrintln((char*)"");
+    myIO->serialPrint(recipe[i].name); myIO->serialPrint((char*)"  ");
+    myIO->serialPrint((char*)" Number of steps : " );
+    myIO->serialPrint(recipe[i].recipe_sequence.length);
+    myIO->serialPrintln((char*)"");
+    for (int j=1;j<=recipe[i].recipe_sequence.length;j++){
+      myIO->serialPrint((char*)"[ ");
+      myIO->serialPrint(recipe[i].recipe_sequence.Bx[j]);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.By[j]);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.Bz[j]);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.time[j]);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.led[j].color);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.led[j].intensity);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.grad[j].grad_x);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.grad[j].grad_y);
+      myIO->serialPrint((char*)", ");
+      myIO->serialPrint(recipe[i].recipe_sequence.grad[j].grad_z);
+      myIO->serialPrint((char*)"] ");
+      myIO->serialPrintln((char*)"");
     }
-	//recipeNumber=-1;
-	while(myIO->recipeFileavailable() && not error){
-		// Read one line from the recipe file, ignore comment lines
-		if (readOneLine(line)) {
-			//linecount++;
-			// myIO->serialPrintln(linecount);
-			// myIO->serialPrintln(ln_count);
-			if(line[0] == '@'){
-			// Split line into column fields at comma's
-				numCol = readColumns(line, ',', col, N);
-				// Version number
-				if (comparestring(col[1],"Version")) {
-					version=getversion(col[2]);
-					if (version==0) {error=true; break;}
-				};
-				// Parameter list
-				if (comparestring(col[1],"Parameters")) {
-					// To be done. It is good to check if the order is what we expect. LEON
-				}
-				// Recipe
-				if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes && not error){
-					// The recipe description is on the same line in col[2]:
-					recipe::count++;//recipeNumber initialized at -1.
-					strncpy(recipes_array[recipe::count].name,col[2],strlen(col[2])+1);
-					//myIO->serialPrintln(recipes_array[recipe::count].name);
-					bool recipeEnd=false;
-					//Keep reading until you find EndRecipe
-					while (readOneLine(line) && not recipeEnd && not error){
-						if (line[0] == '@') {
-							// Split lines into columns
-							numCol = readColumns(line, ',', col, N);
-							// Number of cycles
-							if (comparestring(col[1],"N_cycles")){
-								recipes_array[recipe::count].N_cycles = atoi(col[2]);
-							}	
-							// Sequence
-							if (comparestring(col[1],"Sequence")){
-								//myIO->serialPrintln(linecount);
-								if (not readSequence(line, recipes_array[recipe::count].recipe_sequence)){
-									myIO->serialPrintln((char*)"Error, sequence not found");
-									error=true;
-								}
-							}
-						// End Recipe
-						recipeEnd=comparestring(col[1],"EndRecipe");
-						};//End if line starts with @
-					};//End while readOneLine
-				};//end if col[1]=Recipe
-			};// end if "@"
-		};//End if readOneLine for entire recipe
+  }
+}  
+
+/* Load recipes from recipes file and store into recipes array. Returns the
+   number of recipes found */
+int recipes::LoadRecipes() {
+  recipe * recipes_array; // All recipes in struc format
+  char*    line = new char[MAX_LENGTH]; //Line read from file
+  int      N = 10; // Maximum number of columns we expect to read
+  char*    col[N]; // Array with column values
+  int      numCol; // Number of columns found on line
+  bool     error = false;
+  int      version = 0 ;
+  //int recipeNumber; // We can load several recipes, numbered [0..MaxRecipes]
+  //int linecount = 0; //For debug only
+  //recipeNumber=-1;
+  
+  // Initialize 
+  recipes_array = new recipe[MaxRecipes]; // Initialize
+  for (int i = 0; i < N; i++){
+    col[i] = new char[MAX_LENGTH];
+  }
+
+  while(myIO->recipeFileavailable() && not error){
+    // Read one line from the recipe file, ignore comment lines
+    if (readOneLine(line)) {
+      //linecount++;
+      // myIO->serialPrintln(linecount);
+      // myIO->serialPrintln(ln_count);
+      if(line[0] == '@'){
+	// Split line into column fields at comma's
+	numCol = readColumns(line, ',', col, N);
+	// Version number
+	if (comparestring(col[1],"Version")) {
+	  version=getversion(col[2]);
+	  if (version==0) {error=true; break;}
+	};
+	// Parameter list
+	if (comparestring(col[1],"Parameters")) {
+	  /* To be done. It is good to check if the order is what we
+	     expect. LEON */
 	}
-	/* For debug, send recipe to serial port for monitoring */
-	for (int i=0;i<=recipe::count;i++){
-		myIO->serialPrintln((char*)"");
-		myIO->serialPrint(recipes_array[i].name); myIO->serialPrint((char*)"  ");
-		myIO->serialPrint((char*)" Number of steps : " );myIO->serialPrint(recipes_array[i].recipe_sequence.length);
-		myIO->serialPrintln((char*)"");
-		for (int j=1;j<=recipes_array[i].recipe_sequence.length;j++){
-			myIO->serialPrintln((char*)"");
-			myIO->serialPrint((char*)"[ ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.Bx[j]);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.By[j]);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.Bz[j]);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.time[j]);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.led[j].color);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.led[j].intensity);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_x);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_y);myIO->serialPrint((char*)", ");
-			myIO->serialPrint(recipes_array[i].recipe_sequence.grad[j].grad_z);
-			myIO->serialPrint((char*)"] ");
-			myIO->serialPrintln((char*)"");
+	// Recipe
+	if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes &&
+	    not error){
+	  // The recipe description is on the same line in col[2]:
+	  recipe::count++;//recipeNumber initialized at -1.
+	  strncpy(recipes_array[recipe::count].name,col[2],strlen(col[2])+1);
+	  //myIO->serialPrintln(recipes_array[recipe::count].name);
+	  bool recipeEnd=false;
+	  //Keep reading until you find EndRecipe
+	  while (readOneLine(line) && not recipeEnd && not error){
+	    if (line[0] == '@') {
+	      // Split lines into columns
+	      numCol = readColumns(line, ',', col, N);
+	      // Number of cycles
+	      if (comparestring(col[1],"N_cycles")){
+		recipes_array[recipe::count].N_cycles = atoi(col[2]);
+	      }	
+	      // Sequence
+	      if (comparestring(col[1],"Sequence")){
+		//myIO->serialPrintln(linecount);
+		if (not readSequence(line,
+				recipes_array[recipe::count].recipe_sequence)){
+		  myIO->serialPrintln((char*)"Error, sequence not found");
+		  error=true;
 		}
-	}
-	return recipe::count; /* If succesfull recipeNumber >=0 */
+	      }
+	      // End Recipe
+	      recipeEnd=comparestring(col[1],"EndRecipe");
+	    };//End if line starts with @
+	  };//End while readOneLine
+	};//end if col[1]=Recipe
+      };// end if "@"
+    };//End if readOneLine for entire recipe
+  }
+  /* For debug, send recipe to serial port for monitoring */
+  serialRecipesPrint(recipes_array,recipe::count);
+  return recipe::count; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
 
 
 /* Program_init()
-This is the main function to change when altering the programs. This defines what each individual program can do. In an older version, the programs were hard coded. Later we defined a RECIPES.CSV that is read from flash, which is easier for the user. The code was tweaked, so it has a lot of remnants of the hard coded period. Needs major rehaul. LEON
+   This is the main function to change when altering the programs. This defines what each individual program can do. In an older version, the programs were hard coded. Later we defined a RECIPES.CSV that is read from flash, which is easier for the user. The code was tweaked, so it has a lot of remnants of the hard coded period. Needs major rehaul. LEON
 
-The most important setting is the field B_arrayfield_i[j] (i = x or y or z) (j = 1,2,3,4... B_nr_set) which stores the magnetic fields that should be applied in consecutive order. Furthermore the timing should be stored in the Switching_time[j] array, which stores how long the magnetic field is kept at the value of B_arrayfield_i[j]. The length of these arrays should always be equal to B_nr_set. Some extra parameters are 
+   The most important setting is the field B_arrayfield_i[j] (i = x or y or z) (j = 1,2,3,4... B_nr_set) which stores the magnetic fields that should be applied in consecutive order. Furthermore the timing should be stored in the Switching_time[j] array, which stores how long the magnetic field is kept at the value of B_arrayfield_i[j]. The length of these arrays should always be equal to B_nr_set. Some extra parameters are 
    //LED_switch_cycles;  whether the led color should switch after a number of cycles (0 = no switch, always the same color)
    //Nr_cycles; whether the program should stop after a number of cycles (0 = never stops)
    //Period_current_sense; //frequency of the current update
    //extra_par; //the value of the extra parameter that is saved in the header of the .CSV file
-//all these parameters are initialized at standard values:
-    //B_arrayfield_x[j] = 0.0; 
-    //B_arrayfield_y[j] = 0.0; 
-    //B_arrayfield_z[j] = 0.0;
-    //Switching_time[j] = 500; (ms)
-    //Gradient_x[j] = 1;
-    //Gradient_y[j] = 1;
-    //Gradient_z[j] = 1;
-    //LED_switch_cycles = 0;
-    //Nr_cycles = 0;
-    //Period_current_sense = 1;
-    //extra_par = 0.0;
-    //ONLY changes to these standard settings should be programmed (when you want B_arrayfield_x[3] to be 0 in program x the program does not need the line B_arrayfield_x[3] = 0;) 
+   //all these parameters are initialized at standard values:
+   //B_arrayfield_x[j] = 0.0; 
+   //B_arrayfield_y[j] = 0.0; 
+   //B_arrayfield_z[j] = 0.0;
+   //Switching_time[j] = 500; (ms)
+   //Gradient_x[j] = 1;
+   //Gradient_y[j] = 1;
+   //Gradient_z[j] = 1;
+   //LED_switch_cycles = 0;
+   //Nr_cycles = 0;
+   //Period_current_sense = 1;
+   //extra_par = 0.0;
+   //ONLY changes to these standard settings should be programmed (when you want B_arrayfield_x[3] to be 0 in program x the program does not need the line B_arrayfield_x[3] = 0;) 
 
-B_nr_max is set in MagOD2.ino. Increase if you need bigger sequences:
-#define B_nr_max 12 //Max number of elements
+   B_nr_max is set in MagOD2.ino. Increase if you need bigger sequences:
+   #define B_nr_max 12 //Max number of elements
 
-Input: 
-recipe_array: array of recipes describing measurement procedure
-recipe_num: which recipe the user selected
+   Input: 
+   recipe_array: array of recipes describing measurement procedure
+   recipe_num: which recipe the user selected
 
 */
 
-void recipes::program_init(int recipe_num)
-{   
-	
-	recipe * recipes_array = new recipe[MaxRecipes];
-	myIO->serialPrintln((char*)"Starting program_init");delay(1000);
+void recipes::program_init(int recipe_num){
+  recipe * recipes_array = new recipe[MaxRecipes];
+  myIO->serialPrintln((char*)"Starting program_init");//delay(1000);
 
-	// Reset all arrays,default to do nothing for 1 second 
-	B_nr_set = 1; // [0..1]
-	memset(B_arrayfield_x, 0, B_NR_MAX); // Fields off
-	memset(B_arrayfield_y, 0, B_NR_MAX);
-	memset(B_arrayfield_z, 0, B_NR_MAX);
-	memset(Switching_time,1000,B_NR_MAX); // Switching times to 100 ms
-	memset(Gradient_x, 1, B_NR_MAX); // Single coil operation (1)
-	memset(Gradient_y, 1, B_NR_MAX);
-	memset(Gradient_z, 1, B_NR_MAX);
+  // Reset all arrays,default to do nothing for 1 second 
+  B_nr_set = 1; // [0..1]
+  memset(B_arrayfield_x, 0, B_NR_MAX); // Fields off
+  memset(B_arrayfield_y, 0, B_NR_MAX);
+  memset(B_arrayfield_z, 0, B_NR_MAX);
+  memset(Switching_time,1000,B_NR_MAX); // Switching times to 100 ms
+  memset(Gradient_x, 1, B_NR_MAX); // Single coil operation (1)
+  memset(Gradient_y, 1, B_NR_MAX);
+  memset(Gradient_z, 1, B_NR_MAX);
 	
-	// Copy measurement settings from recipes_array. Inefficient? See above. LEON 
-	B_nr_set =  recipes_array[recipe_num].recipe_sequence.length; 
+  // Copy measurement settings from recipes_array. Inefficient? See above. LEON 
+  B_nr_set =  recipes_array[recipe_num].recipe_sequence.length; 
 	
-	for (int i=0; i <= B_nr_set; i++){
-		B_arrayfield_x[i] = recipes_array[recipe_num].recipe_sequence.Bx[i];
-		B_arrayfield_y[i] = recipes_array[recipe_num].recipe_sequence.By[i];
-		B_arrayfield_z[i] = recipes_array[recipe_num].recipe_sequence.Bz[i];
-		Switching_time[i] = recipes_array[recipe_num].recipe_sequence.time[i];
-		LEDColor_array[i] = recipes_array[recipe_num].recipe_sequence.led[i].color;
-		LEDInt_array[i]   = recipes_array[recipe_num].recipe_sequence.led[i].intensity;
-	}
+  for (int i=0; i <= B_nr_set; i++){
+    B_arrayfield_x[i] = recipes_array[recipe_num].recipe_sequence.Bx[i];
+    B_arrayfield_y[i] = recipes_array[recipe_num].recipe_sequence.By[i];
+    B_arrayfield_z[i] = recipes_array[recipe_num].recipe_sequence.Bz[i];
+    Switching_time[i] = recipes_array[recipe_num].recipe_sequence.time[i];
+    LEDColor_array[i] = recipes_array[recipe_num].recipe_sequence.led[i].color;
+    LEDInt_array[i]   = recipes_array[recipe_num].recipe_sequence.led[i].intensity;
+  }
 }

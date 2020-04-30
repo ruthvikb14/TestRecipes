@@ -6,13 +6,13 @@
 
 #if defined(stdioVersion)
 /*IO for command line on PC */
-	#warning "Compiling for command line stdio"
+//	#warning "Compiling for command line stdio"
 	#include<fstream>
 	using namespace std;
 
 #elif defined(ESP_PLATFORM)
 /*IO for serial port on Arduino */
-	#warning "Compiling for Arduino serial"
+//	#warning "Compiling for Arduino serial"
 	#include <Arduino.h>
 	#include <SD.h>
 #endif

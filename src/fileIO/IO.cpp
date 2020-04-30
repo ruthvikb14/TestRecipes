@@ -16,11 +16,11 @@ IO::IO(char * fname){
 
 void IO::initSerial(){
 	#if defined(stdioVersion)
-		//#warning "stdioVersion initSerial"
-		printf("%63s\n", "**********************************************");
-		printf("%50s","MAGOD Recipes By");
-		printf("\n%60s\n", "Prof. Dr. Leon Abelmann & B.S.R.Ruthvik");
-		printf("%63s\n", "**********************************************");
+		// //#warning "stdioVersion initSerial"
+		// printf("%63s\n", "**********************************************");
+		// printf("%50s","MAGOD Recipes By");
+		// printf("\n%60s\n", "Prof. Dr. Leon Abelmann & B.S.R.Ruthvik");
+		// printf("%63s\n", "**********************************************");
 	#elif defined (ESP_PLATFORM)	
 		//#warning "SD version initSerial"
 		Serial.begin(115200);
