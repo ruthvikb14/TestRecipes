@@ -1,5 +1,6 @@
+.DEFAULT_GOAL := TestRecipes
+
 CC=g++ #Compiler
-#CFLAGS=-I src/fileIO/include #Compiler directives
 CFLAGS=-D stdioVersion #Compiler directive for command line version
 
 # Macro for MagOD object files
@@ -15,7 +16,14 @@ DEPS_RECIPES = src/recipes/recipes.h src/led/led.h
 DEPS = TestRecipes.h src/fileIO/IO.h $(DEPS_RECIPES)
 
 # All cpp files depend on the includes, so recompile their objects:
-%.o: %.cc $(DEPS)
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+# TestRecipes is special, Arduino IDE does not like a cpp in the root,
+# instead we use a c++ (link to TestRecipes.ino using
+# Unix: ln -s TestRecipes.ino TestRecipes.c++
+# Windows: ??
+TestRecipes.o: TestRecipes.c++ $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Dependencies of TestRecipes and what to include
