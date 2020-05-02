@@ -57,7 +57,7 @@ bool readOneLine(char* line){
 		if(endofline && not linefound) {
 			//myIO->serialPrint((char*)"Ignoring comment line:");
 			//if(line[0]=='#');
-			if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<12);
+			if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<20);
 			else linefound = true;
 		}
 	//myIO->serialPrintln(line);
