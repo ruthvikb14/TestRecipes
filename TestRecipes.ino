@@ -12,12 +12,12 @@ int main(int argc, char** argv){
   
   #if defined(stdioVersion)
     myIO->initSerial();
-    if(argc==1){
-      myIO->serialPrintln((char*)"Please provide the filename as in the format below");
-      myIO->serialPrintln((char*)"TestRecipes filename (for DOS)");
-      myIO->serialPrintln((char*)"./TestRecipes filename (for Mac)");
+    if(argc != 2){
+      myIO->serialPrintln((char*)"Usage: TestRecipes [FILE]");
     }
+  else{
     strcpy(filename, argv[1]);
+  }
   #elif defined(ESP_PLATFORM)
     strcpy(filename, argv[0]);
   #endif
@@ -33,13 +33,13 @@ int main(int argc, char** argv){
 
   /* Read file contents character by character and display on command
      line or serial monitor */
-  //while(myIO->recipeFileavailable())
-    //{
-      //myIO->serialPrintch(myIO->recipeFileread());
-    //}
-  //myIO->recipeFileclose();
+  // while(myIO->recipeFileavailable())
+    // {
+      // myIO->serialPrintch(myIO->recipeFileread());
+    // }
+  // myIO->recipeFileclose();
   
-  //myIO = new IO(filename); 
+  // myIO = new IO(filename); 
   
   /* Read Recipes from file */
   int numRecipes= myrecipes->LoadRecipes();

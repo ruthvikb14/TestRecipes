@@ -53,16 +53,17 @@ bool readOneLine(char* line){
 		
 		}
 		// Comment line starts with #, ignore it:
-		if (endofline && line[0] == '#') {
+		//  Ruthvik check
+		if(endofline && not linefound) {
 			//myIO->serialPrint((char*)"Ignoring comment line:");
-		}
-		else{
-			linefound=true;
+			if(line[0]=='#');
+			else if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<12);
+			else linefound = true;
 		}
 	//myIO->serialPrintln(line);
 	}
-	// myIO->serialPrint((char*)"Line found: ");
-	//myIO->serialPrintln(line);
+	myIO->serialPrint((char*)"Line found: ");
+	myIO->serialPrintln(line);
 	ln_count++;
 	return linefound;
 }
@@ -74,9 +75,9 @@ int readColumns(char* line, char ch, char * col[], int numCol){
 	int i=0; //counts columns
 	int pos = 0;
 	char * ln;
-	//myIO->serialPrintln((char*)"readColumns: ");myIO->serialPrint(line);
+	// myIO->serialPrint((char*)"readColumns: ");myIO->serialPrintln(line);
 	// As long as there is at least two characters left and we want more columns
-	while (strlen(line) > 1 && i<numCol){
+	while (line!="" && strlen(line)!=0 && i<numCol){
 	    ln =strchr(line, ch);// find location of first delimeter
 		if(ln == NULL) break;
 		else{
@@ -161,24 +162,25 @@ bool readSequenceStep(char* line, sequence& seq, int num){
 	int N=10;
 	char * col[N]; //We need to read 7 columns (0:6)
 	int numCol; //Number of columns read
-	
+	//myIO->serialPrintln(strlen(line));
 	for (int i = 0; i < N; i++){
 		col[i] = new char[MAX_LENGTH];
 	}
 	numCol = readColumns(line, ',', col, N);
 	// Throws error message when negative value(s) detected and corrects to zero
-	for(int j = 1; j < N; j++){
-		if(atof(col[j]) < 0 && j!= 5){
-			col[j] = (char*)"0";
-			myIO->serialPrintln((char*)"");
-			myIO->serialPrint((char*)"Negative value(s) detected on line number: ");
-			myIO->serialPrint(ln_count);
-			myIO->serialPrintln((char*)" and corrected to ZERO.");
-			break;
+	if (numCol>5 && strlen(line)!=0){
+		for(int j = 1; j < N; j++){
+			if(atof(col[j]) < 0 && j!= 5){
+				col[j] = (char*)"0";
+				myIO->serialPrintln((char*)"");
+				myIO->serialPrint((char*)"Negative value(s) detected on line number: ");
+				myIO->serialPrint(ln_count);
+				myIO->serialPrintln((char*)" and corrected to ZERO.");
+			}
+		
 		}
-	}
 	//	 We expect nine columns  (col[0] is empty):
-	if (numCol>5){
+	
 		seq.Bx[num]            = atof(col[1]);//B_x[mT]
 		seq.By[num]            = atof(col[2]);//B_y[mT]
 		seq.Bz[num]            = atof(col[3]);//B_z[mT]
@@ -206,16 +208,23 @@ bool readSequence(char* line, sequence& seq){
 	for (int i = 0; i < N; i++){
 		col[i] = new char[MAX_LENGTH];
 	}
+	// myIO->serialPrintln(line);
 	/* Read until you find EndSequence. The order of checking is
      important, first check endSequence, so that you don't read one
      line too many */
-	while(not endSequence && readOneLine(line)){
+	while(not endSequence && readOneLine(line) && line!=""){
+		//myIO->serialPrintln(line);
 		if (line[0] == '@'){
 			numCol = readColumns(line, ',', col, N);
 			endSequence=comparestring(col[1],"EndSequence");
-			//if (endSequence) myIO->serialPrintln((char*)"End sequence found");
+			if (!endSequence){
+				myIO->serialPrint((char*)"Line: ");
+				myIO->serialPrint(ln_count);
+				myIO->serialPrintln((char*)"\tEndsequence not found");
+				break;
+			}
 		}
-		else { // We assume every line has a sequence step. Can be broken! LEON
+		else if(line[0]!='\0') { // We assume every line has a sequence step. Can be broken! LEON
 			readSequenceStep(line, seq, sequenceNumber);
 			sequenceNumber=sequenceNumber+1;
 			//myIO->serialPrintln((char*)"sequenceNumber: ");myIO->serialPrint(sequenceNumber);
@@ -266,11 +275,12 @@ int recipes::LoadRecipes()
 				if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes && not error){
 					// The recipe description is on the same line in col[2]:
 					recipe::count++;//recipeNumber initialized at -1.
-					strncpy(recipes_array[recipe::count].name,col[2],strlen(col[2])+1);
+					strncpy(recipes_array[recipe::count].name,stripChar(col[2]),strlen(col[2])+1);
 					//myIO->serialPrintln(recipes_array[recipe::count].name);
 					bool recipeEnd=false;
 					//Keep reading until you find EndRecipe
 					while (readOneLine(line) && not recipeEnd && not error){
+						//myIO->serialPrintln(line);
 						if (line[0] == '@') {
 							// Split lines into columns
 							numCol = readColumns(line, ',', col, N);
@@ -279,11 +289,22 @@ int recipes::LoadRecipes()
 								recipes_array[recipe::count].N_cycles = atoi(col[2]);
 							}	
 							// Sequence
-							if (comparestring(col[1],"Sequence")){
+							else if (comparestring(col[1],"Sequence")){
 								//myIO->serialPrintln(linecount);
 								if (not readSequence(line, recipes_array[recipe::count].recipe_sequence)){
-									myIO->serialPrintln((char*)"Error, sequence not found");
+									myIO->serialPrint((char*)"Line: ");
+									myIO->serialPrint(ln_count);
+									myIO->serialPrintln((char*)"\tError, unable to read sequence");
 									error=true;
+								}
+							}
+							else{
+								
+								if(not(comparestring(col[1],"EndSequence")) && not(comparestring(col[1],"EndRecipe"))){
+									myIO->serialPrint((char*)"Line: ");
+									myIO->serialPrint(ln_count);
+									myIO->serialPrintln((char*)"\tError, check the line");
+									//break;
 								}
 							}
 						// End Recipe
