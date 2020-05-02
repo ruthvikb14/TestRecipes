@@ -56,8 +56,8 @@ bool readOneLine(char* line){
 		//  Ruthvik check
 		if(endofline && not linefound) {
 			//myIO->serialPrint((char*)"Ignoring comment line:");
-			if(line[0]=='#');
-			else if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<12);
+			//if(line[0]=='#');
+			if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<12);
 			else linefound = true;
 		}
 	//myIO->serialPrintln(line);
