@@ -1,14 +1,27 @@
 #include "TestRecipes.h"
 
-IO *  myIO;      //The exact IO routines depend on defined(SD) or defined(stdio)
+IO *  myIO; /*The exact IO routines depend on platform:
+	      ESP32 serial monitor (ESP_PLATFORM)
+	      Command line (stdioVersion)) */
 recipes * myrecipes; //Defintion of recipe file
 
+/* Arrays that stores a single recipe, for use in MagOD.ino */
+unsigned int  B_nr_set; 
+unsigned long Switching_time[B_NR_MAX]; 
+double        B_arrayfield_x[B_NR_MAX];
+double        B_arrayfield_y[B_NR_MAX];
+double        B_arrayfield_z[B_NR_MAX];
+int           LEDColor_array[B_NR_MAX];
+int           LEDInt_array[B_NR_MAX];
+bool          Gradient_x[B_NR_MAX];
+bool          Gradient_y[B_NR_MAX];
+bool          Gradient_z[B_NR_MAX];
+
+// Help variables
 bool done = false;
 
 int main(int argc, char** argv){
-  
   char filename[20];
-  //myIO.serialPrintln((char*)"TestRecipes, expects RECIPES.CSV in current directory");
   
   #if defined(stdioVersion)
     myIO->initSerial();
@@ -23,22 +36,23 @@ int main(int argc, char** argv){
   #endif
   
   myIO = new IO(filename);
-  /* check if Recipes file exists */
   
+  /* check if Recipes file exists */ 
   bool check = myIO->checkFile();
   if(!check){
     myIO->serialPrintln((char*)"Failed to open file for writing recipes file");
     return 0;
-    }
 
-  /* Read file contents character by character and display on command
-     line or serial monitor */
-  // while(myIO->recipeFileavailable())
-    // {
-      // myIO->serialPrintch(myIO->recipeFileread());
-    // }
-  // myIO->recipeFileclose();
-  
+    }
+    
+  /* For debug: Read file contents character by character and display
+     on command line or serial monitor */
+  //while(myIO->recipeFileavailable())
+  //{
+  //myIO->serialPrintch(myIO->recipeFileread());
+  //}
+  //myIO->recipeFileclose();
+    
   // myIO = new IO(filename); 
   
   /* Read Recipes from file */
