@@ -1,4 +1,3 @@
-
 .DEFAULT_GOAL := TestRecipes
 
 CC=g++ #Compiler
