@@ -27,3 +27,4 @@ extern bool Gradient_y[B_NR_MAX];  //determines whether both coils must be on or
 extern bool Gradient_z[B_NR_MAX];  //determines whether both coils must be on or just one of them for the z-direction, 0 is both on, 1 is only one on
 
 #endif
+
