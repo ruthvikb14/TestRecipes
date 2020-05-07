@@ -17,10 +17,6 @@ IO::IO(char * fname){
 void IO::initSerial(){
 	#if defined(stdioVersion)
 		//#warning "stdioVersion initSerial"
-		printf("%63s\n", "**********************************************");
-		printf("%50s","MAGOD Recipes By");
-		printf("\n%60s\n", "Prof. Dr. Leon Abelmann & B.S.R.Ruthvik");
-		printf("%63s\n", "**********************************************");
 	#elif defined (ESP_PLATFORM)	
 		//#warning "SD version initSerial"
 		Serial.begin(115200);
@@ -28,9 +24,6 @@ void IO::initSerial(){
 			; // wait for serial port to connect. Needed for native USB port only
 		}
 		//Serial.println(SD_CS);
-		Serial.println("**********************************");
-		Serial.println("\t  MAGOD Recipes");
-		Serial.println("**********************************");
 		if (!SD.begin(SD_CS)) {
 			Serial.println("SD Card not found");
 		}
@@ -135,22 +128,22 @@ bool IO::checkFile() {
 		//#warning "stdioVersion checkFile"
 		//recipeFile_.open("RECIPES1.CSV", ios::in);
 		if (recipeFile_.good()) {
-			serialPrintln((char*)"****File checked****"); 
+			//serialPrintln((char*)"****File found****"); 
 			check_flag = true;
 		}
 		else {
-			serialPrintln((char*)"****File doesn't exist****");
+			//serialPrintln((char*)"****File not found****");
 			check_flag = false;
 		}
 	#elif defined(ESP_PLATFORM)
 		//#warning "SD version checkFile"
 		//recipeFile = SD.open("/RECIPES.CSV", FILE_READ); 
 		if (recipeFile) {
-			serialPrintln((char*)"****File checked****"); 
+			//serialPrintln((char*)"****File checked****"); 
 			check_flag = true;
 		}
 		else {
-			serialPrintln((char*)"****File doesn't exist****");
+			//serialPrintln((char*)"****File not found****");
 			check_flag = false;
 		}
 	#endif

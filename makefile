@@ -22,8 +22,7 @@ DEPS = TestRecipes.h src/fileIO/IO.h $(DEPS_RECIPES)
 # TestRecipes is special, Arduino IDE does not like a cpp in the root,
 # instead we use a c++ (link to TestRecipes.ino using
 # Unix: ln -s TestRecipes.ino TestRecipes.c++
-# Windows: ln -s TestRecipes.ino TestRecipes.cc
-# (Ruthvik) change c++ to cc for windows
+# Windows: ln -s TestRecipes.ino TestRecipes.c++
 TestRecipes.o: TestRecipes.c++ $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
