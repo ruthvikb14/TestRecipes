@@ -76,8 +76,9 @@ int readColumns(char* line, char ch, char * col[], int numCol){
 			for(int j=0; j< pos; j++){
 				col[i][j] = line[j];
 			}
-		}
+		
 		col[i][pos]='\0';
+		}
 		// myIO->serialPrintln(col[i]);
 		i++;
 		line+= pos+1; // cut that part of the line, including delimeter
@@ -181,11 +182,12 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 		stepFound=(seq.Bx[num]>=0 && seq.By[num]>=0 && seq.Bz[num]>=0 &&
 	       seq.time[num]>=0 && seq.led[num].color>=0 && seq.led[num].intensity >=0 &&
 		   seq.grad[num].grad_x>=0 && seq.grad[num].grad_y>=0 && seq.grad[num].grad_z>=0);
-	}
-	if(!stepFound){
-		myIO->serialPrint((char*)"Line: ");
-		myIO->serialPrint(ln_count);
-		myIO->serialPrintln((char*)"\tWarning, provide LED color");
+	
+		if(line[0]!='#' && seq.led[num].color < 0){
+			myIO->serialPrint((char*)"Line: ");
+			myIO->serialPrint(ln_count);
+			myIO->serialPrintln((char*)"\tError, provide LED color");
+		}
 	}
 	return stepFound;
 }
@@ -217,9 +219,9 @@ bool readSequence(char* line, sequence& seq, char* recipe_name){
 			}
 		}
 		else{ // We assume every line has a sequence step. Can be broken! LEON
-			if(line[0]=='#') continue;
+			//if(line[0]=='#') continue;
 			//else if(line=="\0") line+=strlen(line);
-			else if(line[0]!='\0'){
+			if(line[0]!='\0'){
 				readSequenceStep(line, seq, sequenceNumber, recipe_name);
 				sequenceNumber=sequenceNumber+1;
 				//myIO->serialPrintln((char*)"sequenceNumber: ");myIO->serialPrint(sequenceNumber);
@@ -307,6 +309,7 @@ int recipes::LoadRecipes()
 					// The recipe description is on the same line in col[2]:
 					recipe::count++;//recipeNumber initialized at -1.
 					strncpy(recipes_array[recipe::count].name,stripChar(col[2]),strlen(col[2])+1);
+					strcat(recipes_array[recipe::count].name, stripChar(col[3]));
 					//myIO->serialPrintln(recipes_array[recipe::count].name);
 					bool recipeEnd=false;
 					//Keep reading until you find EndRecipe
