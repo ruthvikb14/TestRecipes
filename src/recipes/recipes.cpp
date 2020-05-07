@@ -351,7 +351,7 @@ int recipes::LoadRecipes()
 		};//End if readOneLine for entire recipe
 	}
 	/* For debug, send recipe to serial port for monitoring */
-	//serialRecipesPrint(recipes_array,recipe::count);
+	serialRecipesPrint(recipes_array,recipe::count);
 	return recipe::count; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
 
