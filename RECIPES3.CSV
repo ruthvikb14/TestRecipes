@@ -24,7 +24,7 @@
 @,EndRecipe,,,,,,,,
 ,,,,,,,,,
 ,,,,,,,,,
-@,Recipe,Cmag, Red,,,,,,,
+@,Recipe,"Cmag, Red",,,,,,,
 #,"If N_cycles = 0, run indefinitely",,,,,,,,
 @,N_cycles,0,,,,,,,
 @,Sequence,,,,,,,,
@@ -45,12 +45,12 @@
 @,N_cycles,,0,,,,,,
 @,Sequence,,,,,,,,
 #,B_x[mT],B_y[mT],B_z[mT],T_switch[s],LED Color,LED Intensity [0-255],Grad_x,Grad_y,Grad_z
-,,,,,,,,,,,
-,,,,,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
 ,0,0,1,800,GREEN,60,1,1,1
 
 ,0,0,1,800,,,,,
-,,,,,,,,,,,
+,,,,,,,,,
 ,,,1,800,GREEN,60,1,1,1
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
