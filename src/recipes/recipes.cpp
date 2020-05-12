@@ -11,7 +11,8 @@ recipes::recipes(){
 
 int recipe::count = -1; // For counting number of recipes
 int ln_count = 0; // For counting the lines in the csv file
-
+char* param[MAXPARSTRINGS];
+const char* data[MAXPARSTRINGS] = {"B_x","B_y","B_z","T_switch","LED_Color","LED_Intensity","Grad_x","Grad_y","Grad_z"};
 
 
 /* Read one line from file, return store into line. Return true if end of line
@@ -43,7 +44,7 @@ bool readOneLine(char* line){
 			if(line[0]=='#') {
 				line += strlen(line);
 			}
-			if(line[0]==',' && line[1]==',' && line[2]==',' && strlen(line)<15);
+			if(line[0]==',' && line[1]==',' && strlen(line)<15);
 			else linefound = true;
 		}
 	//myIO->serialPrintln(line);
@@ -90,11 +91,11 @@ int readColumns(char* line, char ch, char * col[], int numCol){
 
 
 /* Strip first and last quotes of text string. NOT TESTED! */
-char* stripChar(char * str){
+char* stripQuotes(char * str){
 	//Should check if string really has quotes! Leon
 	int i,j;
     for (i = 0; str[i] != '\0'; ++i) {
-        while (!((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z') || str[i] == '\0' || str[i] == ' ')) {
+        while (str[i]=='"') {
             for (j = i; str[j] != '\0'; ++j) {
                 str[j] = str[j + 1];
             }
@@ -123,17 +124,17 @@ int getversion(char* str){
 
 /* Get list of parameter names from col[], which has length N.
 Non-empty names are stored in names[]. Returns length of list [0:length] */
-int getparameters(char * names[], char * col[], int N){
-	int j=0;
+int getparameters(char* names[], char * col[], int N){
+	int j=1;
+	//int k=1;
 	for (int i = 0; i < N; i++){
-		names[i] = new char[MAX_LENGTH];
+		names[i] = new char[10];
 	}
-	for (int i=0;( i<= 10 && i <=N) ; i++){
-    // Forget the empty fields
-		if (strlen(col[i]) != 0) {
-			strcpy(names[j], col[i]);
-			j=j+1;}
-	};
+	while(j!=N){
+		if (strlen(col[j]) != 0)
+			strcpy(names[j-1], col[j]);
+		j++;
+	}
 	return j-1;
 }
 
@@ -186,7 +187,7 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 		if(line[0]!='#' && seq.led[num].color < 0){
 			myIO->serialPrint((char*)"Line: ");
 			myIO->serialPrint(ln_count);
-			myIO->serialPrintln((char*)"\tError, provide LED color");
+			myIO->serialPrintln((char*)"\tError, LED color unrecognized");
 		}
 	}
 	return stepFound;
@@ -277,6 +278,8 @@ int recipes::LoadRecipes()
 	int      numCol; // Number of columns found on line
 	bool     error = false;
 	int      version = 0 ;
+	int 	 read_parms; // Read the parameters
+	int 	 num_parms; // Number of parameters found
 	//int recipeNumber; // We can load several recipes, numbered [0..MaxRecipes]
 	//int linecount = 0; //For debug only
 	//recipeNumber=-1;
@@ -303,13 +306,37 @@ int recipes::LoadRecipes()
 				// Parameter list
 				if (comparestring(col[1],"Parameters")) {
 					// To be done. It is good to check if the order is what we expect. LEON
+					if(readOneLine(line)){
+						// myIO->serialPrintln(line);
+						num_parms = readColumns(line, ',', col, N);
+						read_parms = getparameters(param, col, num_parms);
+						int a=0;
+						while(a!=read_parms){
+							//myIO->serialPrintln(param[a]);
+							//myIO->serialPrintln(strlen(param[a]));
+							if(strlen(param[a])==1){
+								myIO->serialPrint((char*)"In Parameters:");
+								myIO->serialPrintln((char*)"\tEmpty column detected");
+								break;
+							}
+							else if(!comparestring(param[a],data[a])){
+								myIO->serialPrint((char*)"In Parameters:\t");
+								myIO->serialPrint((char*)"'");
+								myIO->serialPrint((char*)data[a]);
+								myIO->serialPrint((char*)"'");
+								myIO->serialPrintln((char*)" not found");
+								break;	
+							}
+							a++;
+						}
+					}
 				}
 				// Recipe
 				if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes && not error){
 					// The recipe description is on the same line in col[2]:
 					recipe::count++;//recipeNumber initialized at -1.
-					strncpy(recipes_array[recipe::count].name,stripChar(col[2]),strlen(col[2])+1);
-					strcat(recipes_array[recipe::count].name, stripChar(col[3]));
+					strncpy(recipes_array[recipe::count].name,stripQuotes(col[2]),strlen(col[2])+1);
+					strcat(recipes_array[recipe::count].name, stripQuotes(col[3]));
 					//myIO->serialPrintln(recipes_array[recipe::count].name);
 					bool recipeEnd=false;
 					//Keep reading until you find EndRecipe

@@ -40,7 +40,7 @@
 @,EndSequence,,,,,,,,
 @,EndRecipe,,,,,,,,
 ,,,,,,,,,
-@,Recipe,"Marathon, §$%&green",,,,,,,
+@,Recipe,"Marathon, green",,,,,,,
 #,"If N_cycles = 0, run indefinitely",,,,,,,,
 @,N_cycles,,0,,,,,,
 @,Sequence,,,,,,,,

@@ -40,7 +40,7 @@ int main(int argc, char** argv){
   /* check if Recipes file exists */ 
   bool check = myIO->checkFile();
   if(!check){
-    myIO->serialPrintln((char*)"Failed to open file");
+    //myIO->serialPrintln((char*)"Failed to open file");
     return 0;
 
     }
