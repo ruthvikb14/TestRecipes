@@ -13,6 +13,7 @@ int recipe::count = -1; // For counting number of recipes
 int ln_count = 0; // For counting the lines in the csv file
 char* param[MAXPARSTRINGS];
 const char* data[MAXPARSTRINGS] = {"B_x","B_y","B_z","T_switch","LED_Color","LED_Intensity","Grad_x","Grad_y","Grad_z"};
+bool error_flag = false;
 
 
 /* Read one line from file, return store into line. Return true if end of line
@@ -128,7 +129,7 @@ int getparameters(char* names[], char * col[], int N){
 	int j=1;
 	//int k=1;
 	for (int i = 0; i < N; i++){
-		names[i] = new char[10];
+		names[i] = new char[MAX_LENGTH];
 	}
 	while(j!=N){
 		if (strlen(col[j]) != 0)
@@ -157,17 +158,28 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 		col[i] = new char[MAX_LENGTH];
 	}
 	numCol = readColumns(line, ',', col, N);
-	int j = 1;
 	// Throws error message when negative value(s) detected and corrects to zero
 	for(int j = 1; j < N; j++){
 		if(atof(col[j]) < 0 && j!= 5){
 			col[j] = (char*)"0";
-			myIO->serialPrintln((char*)"");
-			myIO->serialPrint((char*)"Negative value(s) detected on line number: ");
+			//myIO->serialPrintln((char*)"");
+			myIO->serialPrint((char*)"Negative value detected on line ");
 			myIO->serialPrint(ln_count);
 			myIO->serialPrintln((char*)" and corrected to ZERO.");
 		}
 	}
+	
+	if(line[0]!='#' && getLEDColor(col[5]) < 0){
+		myIO->serialPrint((char*)"Line: ");
+		myIO->serialPrint(ln_count);
+		myIO->serialPrint((char*)"\tError, ");
+		myIO->serialPrint((char*)"' ");
+		myIO->serialPrint(col[5]);
+		myIO->serialPrint((char*)" '");
+		myIO->serialPrintln((char*)" LED color unrecognized");
+		error_flag = true;
+	}
+	
 	//	 We expect nine columns  (col[0] is empty):
 	if (numCol>5){
 		seq.Bx[num]            = atof(col[1]);//B_x[mT]
@@ -183,12 +195,6 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 		stepFound=(seq.Bx[num]>=0 && seq.By[num]>=0 && seq.Bz[num]>=0 &&
 	       seq.time[num]>=0 && seq.led[num].color>=0 && seq.led[num].intensity >=0 &&
 		   seq.grad[num].grad_x>=0 && seq.grad[num].grad_y>=0 && seq.grad[num].grad_z>=0);
-	
-		if(line[0]!='#' && seq.led[num].color < 0){
-			myIO->serialPrint((char*)"Line: ");
-			myIO->serialPrint(ln_count);
-			myIO->serialPrintln((char*)"\tError, LED color unrecognized");
-		}
 	}
 	return stepFound;
 }
@@ -216,6 +222,7 @@ bool readSequence(char* line, sequence& seq, char* recipe_name){
 				myIO->serialPrint((char*)"Line: ");
 				myIO->serialPrint(ln_count);
 				myIO->serialPrintln((char*)"\tEndsequence not found");
+				error_flag = true;
 				break;
 			}
 		}
@@ -267,6 +274,7 @@ void serialRecipesPrint(recipe * recipe,int numRecipes){
   }
 }
 
+
 /* Load recipes from recipes file and store into array. Returns the
    number of recipes found */
 int recipes::LoadRecipes()
@@ -285,7 +293,7 @@ int recipes::LoadRecipes()
 	//recipeNumber=-1;
   
 	// Initialize 
-	recipes_array = new recipe[MaxRecipes]; // Initialize
+	recipes_array = new recipe[MaxRecipes];
 	for (int i = 0; i < N; i++){
 		col[i] = new char[MAX_LENGTH];
 	}
@@ -315,17 +323,21 @@ int recipes::LoadRecipes()
 							//myIO->serialPrintln(param[a]);
 							//myIO->serialPrintln(strlen(param[a]));
 							if(strlen(param[a])==1){
-								myIO->serialPrint((char*)"In Parameters:");
+								myIO->serialPrint((char*)"In RECIPE:");
 								myIO->serialPrintln((char*)"\tEmpty column detected");
+								error = true;
+								error_flag = true;
 								break;
 							}
 							else if(!comparestring(param[a],data[a])){
-								myIO->serialPrint((char*)"In Parameters:\t");
+								myIO->serialPrint((char*)"In RECIPE:\t");
 								myIO->serialPrint((char*)"'");
 								myIO->serialPrint((char*)data[a]);
 								myIO->serialPrint((char*)"'");
-								myIO->serialPrintln((char*)" not found");
-								break;	
+								myIO->serialPrintln((char*)" values not found");
+								error = true;
+								error_flag = true;
+								break;
 							}
 							a++;
 						}
@@ -369,7 +381,8 @@ int recipes::LoadRecipes()
 									myIO->serialPrint(col[1]);
 									myIO->serialPrint((char*)"'");
 									myIO->serialPrintln((char*)" unrecognized");
-									//break;
+									error = true;
+									error_flag = true;
 								}
 							}
 							// End Recipe
@@ -380,11 +393,15 @@ int recipes::LoadRecipes()
 			};// end if "@"
 		};//End if readOneLine for entire recipe
 	}
-	/* For debug, send recipe to serial port for monitoring */
-	serialRecipesPrint(recipes_array,recipe::count);
+	#if defined(stdioVersion)
+		if(!error_flag && string(_argv[1]) != "-v"){ myIO->serialPrint(_argv[1]);myIO->serialPrintln((char*)" OK");}
+		/* For debug, send recipe to serial port for monitoring */
+		if(string(_argv[1]) == "-v") serialRecipesPrint(recipes_array,recipe::count);
+	#elif defined(ESP_PLATFORM)
+		serialRecipesPrint(recipes_array,recipe::count);
+	#endif
 	return recipe::count; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
-
 
 /* Program_init()
 This is the main function to change when altering the programs. This defines what each individual program can do. In an older version, the programs were hard coded. Later we defined a RECIPES.CSV that is read from flash, which is easier for the user. The code was tweaked, so it has a lot of remnants of the hard coded period. Needs major rehaul. LEON

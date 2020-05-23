@@ -25,12 +25,14 @@ int main(int argc, char** argv){
   
   #if defined(stdioVersion)
     myIO->initSerial();
-    if(argc != 2){
+    if(argc == 1 || argc > 3){
       myIO->serialPrintln((char*)"Usage: TestRecipes [FILE]");
+      myIO->serialPrintln((char*)"Usage: TestRecipes -v [FILE]");
     }
-  else{
-    strcpy(filename, argv[1]);
-  }
+    else{
+      if(string(argv[1])=="-v") strcpy(filename, argv[2]);
+      else strcpy(filename, argv[1]);
+    }
   #elif defined(ESP_PLATFORM)
     strcpy(filename, argv[0]);
   #endif
