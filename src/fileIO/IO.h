@@ -34,6 +34,7 @@ class IO {
 	IO(char * ); //constructor
 	/* Initialize serial communication */
 	void initSerial();
+	char my_file[20];
 	/* Message to serial monitor */
 	void serialPrint(float message);
 	void serialPrintln(float message);

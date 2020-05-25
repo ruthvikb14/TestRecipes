@@ -65,9 +65,11 @@ class recipes
 	/* Definition of recipes themselves*/
 	recipe recipes_array; // [0..] The number of recipes is limited, should fit on the screen.
 	
+	void serialRecipesPrint(recipe* recipe, int numRecipes);
+	
 	/* Functions to manupulate class */
 	/* Load the recipe from file and stores them in the recipes_array. Return true if success. */
-	int LoadRecipes();
+	recipe* LoadRecipes();
 
 	/* Initialize the measurement arrays to those defined in recipe 'recipe_num' */
 	void program_init(int recipe_num);

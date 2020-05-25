@@ -242,7 +242,7 @@ bool readSequence(char* line, sequence& seq, char* recipe_name){
 }
 
 /* For debugging, print the loaded recipes */
-void serialRecipesPrint(recipe * recipe,int numRecipes){
+void recipes::serialRecipesPrint(recipe* recipe, int numRecipes){
   for (int i=0;i<=numRecipes;i++){
     myIO->serialPrintln((char*)"");
     myIO->serialPrint(recipe[i].name); myIO->serialPrint((char*)"  ");
@@ -277,7 +277,7 @@ void serialRecipesPrint(recipe * recipe,int numRecipes){
 
 /* Load recipes from recipes file and store into array. Returns the
    number of recipes found */
-int recipes::LoadRecipes()
+recipe* recipes::LoadRecipes()
 {
 	recipe * recipes_array; // All recipes in struc format
 	char*    line = new char[MAX_LENGTH]; //Line read from file
@@ -393,14 +393,11 @@ int recipes::LoadRecipes()
 			};// end if "@"
 		};//End if readOneLine for entire recipe
 	}
-	#if defined(stdioVersion)
-		if(!error_flag && string(_argv[1]) != "-v"){ myIO->serialPrint(_argv[1]);myIO->serialPrintln((char*)" OK");}
-		/* For debug, send recipe to serial port for monitoring */
-		if(string(_argv[1]) == "-v") serialRecipesPrint(recipes_array,recipe::count);
-	#elif defined(ESP_PLATFORM)
-		serialRecipesPrint(recipes_array,recipe::count);
-	#endif
-	return recipe::count; /* If succesfull recipeNumber >=0 */
+	if(!error_flag){ myIO->serialPrint(myIO->my_file);myIO->serialPrintln((char*)" OK");}
+	/* For debug, send recipe to serial port for monitoring */
+	//if(string(_argv[1]) == "-v") serialRecipesPrint(recipes_array,recipe::count);
+	//serialRecipesPrint(recipes_array, recipe::count);
+	return recipes_array; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
 
 /* Program_init()

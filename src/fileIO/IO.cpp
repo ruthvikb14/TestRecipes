@@ -6,6 +6,7 @@
 
 //Constructor
 IO::IO(char * fname){
+	strcpy(my_file, fname);
 	#if defined(stdioVersion)
 		recipeFile_.open(fname, ios::in);
 	#elif defined (ESP_PLATFORM)

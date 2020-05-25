@@ -30,7 +30,7 @@ int main(int argc, char** argv){
       myIO->serialPrintln((char*)"Usage: TestRecipes -v [FILE]");
     }
     else{
-      if(string(argv[1])=="-v") strcpy(filename, argv[2]);
+      if(strcmp(argv[1],"-v")==0) strcpy(filename, argv[2]);
       else strcpy(filename, argv[1]);
     }
   #elif defined(ESP_PLATFORM)
@@ -58,10 +58,14 @@ int main(int argc, char** argv){
   // myIO = new IO(filename); 
   
   /* Read Recipes from file */
-  int numRecipes= myrecipes->LoadRecipes();
+  recipe* numRecipes = myrecipes->LoadRecipes();
+  if(strcmp(argv[1],"-v")==0) myrecipes->serialRecipesPrint(numRecipes, numRecipes->count);
+  #if defined(ESP_PLATFORM)
+    myrecipes->serialRecipesPrint(numRecipes, numRecipes->count);
+  #endif
   myIO->serialPrintln((char*)"");
   myIO->serialPrint((char*)"Number of recipes found : ");
-  myIO->serialPrintln(numRecipes+1);
+  myIO->serialPrintln(numRecipes->count+1);
   
   myIO->recipeFileclose();
   
