@@ -10,7 +10,7 @@ Sep 2019. Leon
 
 /*Not too long because we need to display it on the screen and it will consume memory*/
 #define MaxNameLength       20 // Length of recipe name
-#define MaxRecipes          5  // Maximum number of recipes MagOD can load
+#define MaxRecipes          6  // Maximum number of recipes MagOD can load *************RUTHVIK**************
 #define MaxSequenceLength   20 // Maximum number of steps per recipes (not too big, consumes memory
 
 

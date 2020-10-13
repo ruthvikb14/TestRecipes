@@ -13,7 +13,7 @@ int recipe::count = -1; // For counting number of recipes
 int ln_count = 0; // For counting the lines in the csv file
 char* param[MAXPARSTRINGS];
 const char* data[MAXPARSTRINGS] = {"B_x","B_y","B_z","T_switch","LED_Color","LED_Intensity","Grad_x","Grad_y","Grad_z"};
-bool error_flag = false;
+//bool error_flag = false;
 
 
 /* Read one line from file, return store into line. Return true if end of line
@@ -159,7 +159,7 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 	}
 	numCol = readColumns(line, ',', col, N);
 	// Throws error message when negative value(s) detected and corrects to zero
-	for(int j = 1; j < N; j++){
+	/*for(int j = 1; j < N; j++){
 		if(atof(col[j]) < 0 && j!= 5){
 			col[j] = (char*)"0";
 			//myIO->serialPrintln((char*)"");
@@ -167,7 +167,7 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 			myIO->serialPrint(ln_count);
 			myIO->serialPrintln((char*)" and corrected to ZERO.");
 		}
-	}
+	}*/
 	
 	if(line[0]!='#' && getLEDColor(col[5]) < 0){
 		myIO->serialPrint((char*)"Line: ");
@@ -177,7 +177,7 @@ bool readSequenceStep(char* line, sequence& seq, int num, char* recipe_name){
 		myIO->serialPrint(col[5]);
 		myIO->serialPrint((char*)" '");
 		myIO->serialPrintln((char*)" LED color unrecognized");
-		error_flag = true;
+		myIO->error_flag = true;
 	}
 	
 	//	 We expect nine columns  (col[0] is empty):
@@ -222,7 +222,7 @@ bool readSequence(char* line, sequence& seq, char* recipe_name){
 				myIO->serialPrint((char*)"Line: ");
 				myIO->serialPrint(ln_count);
 				myIO->serialPrintln((char*)"\tEndsequence not found");
-				error_flag = true;
+				myIO->error_flag = true;
 				break;
 			}
 		}
@@ -326,7 +326,7 @@ recipe* recipes::LoadRecipes()
 								myIO->serialPrint((char*)"In RECIPE:");
 								myIO->serialPrintln((char*)"\tEmpty column detected");
 								error = true;
-								error_flag = true;
+								myIO->error_flag = true;
 								break;
 							}
 							else if(!comparestring(param[a],data[a])){
@@ -336,7 +336,7 @@ recipe* recipes::LoadRecipes()
 								myIO->serialPrint((char*)"'");
 								myIO->serialPrintln((char*)" values not found");
 								error = true;
-								error_flag = true;
+								myIO->error_flag = true;
 								break;
 							}
 							a++;
@@ -347,6 +347,13 @@ recipe* recipes::LoadRecipes()
 				if (comparestring(col[1],"Recipe") && recipe::count < MaxRecipes && not error){
 					// The recipe description is on the same line in col[2]:
 					recipe::count++;//recipeNumber initialized at -1.
+					if(recipe::count >= MaxRecipes){
+						myIO->serialPrint((char*)"Error, more than ");
+						myIO->serialPrint(MaxRecipes);	
+						myIO->serialPrintln((char*)" recipes detected");
+						error = true;
+						myIO->error_flag = true;
+					}
 					strncpy(recipes_array[recipe::count].name,stripQuotes(col[2]),strlen(col[2])+1);
 					strcat(recipes_array[recipe::count].name, stripQuotes(col[3]));
 					//myIO->serialPrintln(recipes_array[recipe::count].name);
@@ -382,7 +389,7 @@ recipe* recipes::LoadRecipes()
 									myIO->serialPrint((char*)"'");
 									myIO->serialPrintln((char*)" unrecognized");
 									error = true;
-									error_flag = true;
+									myIO->error_flag = true;
 								}
 							}
 							// End Recipe
@@ -393,9 +400,8 @@ recipe* recipes::LoadRecipes()
 			};// end if "@"
 		};//End if readOneLine for entire recipe
 	}
-	if(!error_flag){ myIO->serialPrint(myIO->my_file);myIO->serialPrintln((char*)" OK");}
+	if(!myIO->error_flag){ myIO->serialPrint(myIO->my_file);myIO->serialPrintln((char*)" OK");}
 	/* For debug, send recipe to serial port for monitoring */
-	//if(string(_argv[1]) == "-v") serialRecipesPrint(recipes_array,recipe::count);
 	//serialRecipesPrint(recipes_array, recipe::count);
 	return recipes_array; /* If succesfull recipeNumber >=0 */
 }//End of LoadRecipes
