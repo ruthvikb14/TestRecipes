@@ -6,13 +6,14 @@
 
 #if defined(stdioVersion)
 /*IO for command line on PC */
-	#warning "Compiling for command line stdio"
+	//#warning "Compiling for command line stdio"
+	#include<iostream>
 	#include<fstream>
 	using namespace std;
 
 #elif defined(ESP_PLATFORM)
 /*IO for serial port on Arduino */
-	#warning "Compiling for Arduino serial"
+	//#warning "Compiling for Arduino serial"
 	#include <Arduino.h>
 	#include <SD.h>
 #endif
@@ -30,8 +31,12 @@ class IO {
 	#endif
 	
 	public:
+	#if defined(stdioVersion)
+		fstream recipeOut;
+	#endif
 	IO(); //constructor
 	IO(char * ); //constructor
+	bool error_flag = false;
 	/* Initialize serial communication */
 	void initSerial();
 	char my_file[20];

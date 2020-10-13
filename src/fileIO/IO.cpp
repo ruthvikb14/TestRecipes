@@ -9,6 +9,7 @@ IO::IO(char * fname){
 	strcpy(my_file, fname);
 	#if defined(stdioVersion)
 		recipeFile_.open(fname, ios::in);
+		recipeOut.open("temp.csv", ios::out);
 	#elif defined (ESP_PLATFORM)
 	//Nothing to do
 	recipeFile = SD.open(fname, FILE_READ);
