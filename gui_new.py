@@ -108,7 +108,7 @@ class chef():
         
         # Add Table (widget)
         self.table()
-        self.__root.bind("<Button-1>",self.update_event)
+        #self.__root.bind("<Button-1>",self.update_event)
         
         # Add Text (widget) 
         self.text()
@@ -332,11 +332,6 @@ class chef():
         for i,j in enumerate(a):
             val[i]=val[i-1]+int(j/b)
         return val
-    
-    def update_event(self,event):
-        a = self.__table.get_row_clicked(event)
-        b = self.__table.get_col_clicked(event)
-        print(a,b)
     
     def clear_table(self):
         mod = self.__table.model
